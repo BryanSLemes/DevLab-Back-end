@@ -7,6 +7,7 @@ import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.util.Pair;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
@@ -26,12 +27,6 @@ public class UsuarioController {
     @Autowired
     UsuarioService usuarioService;
 
-    @GetMapping("/listar")
-    public ResponseEntity<List<Usuario>> listarUsuarios() {
-        List<Usuario> usuarios = usuarioService.listarTodosUsuarios();
-        return new ResponseEntity<>(usuarios, HttpStatus.OK);
-    }
-
     @PostMapping("/cadastro")
     public ResponseEntity<String> adicionarUsuario(@RequestBody @Valid Usuario usuario, BindingResult result) {
         if (result.hasErrors()) {
@@ -41,8 +36,8 @@ public class UsuarioController {
             }
             return ResponseEntity.badRequest().body(mensagensDeErro.toString());
         }
-        String resultado = usuarioService.criarUsuario(usuario);
-        return new ResponseEntity<>(resultado, HttpStatus.CREATED);
+        Pair<String, HttpStatus> resultado = usuarioService.criarUsuario(usuario);
+        return new ResponseEntity<>(resultado.getFirst(), resultado.getSecond());
     }
 
     @PostMapping("/login")
@@ -55,6 +50,6 @@ public class UsuarioController {
             return new ResponseEntity<>("Login Feito com sucesso", HttpStatus.OK);
         }
 
-        return new ResponseEntity<>("Login Falhou", HttpStatus.OK);
+        return new ResponseEntity<>("Login Falhou", HttpStatus.UNAUTHORIZED);
     }
 }

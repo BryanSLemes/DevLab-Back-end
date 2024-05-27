@@ -4,6 +4,8 @@ import com.bryanmzili.Freela.data.Usuario;
 import com.bryanmzili.Freela.data.UsuarioRepository;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.util.Pair;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -12,16 +14,16 @@ public class UsuarioService {
     @Autowired
     UsuarioRepository usuarioRepository;
 
-    public String criarUsuario(Usuario usuario) {
+    public Pair<String, HttpStatus> criarUsuario(Usuario usuario) {
         if (usuarioRepository.findByEmail(usuario.getEmail()) == null) {
             if (usuarioRepository.findByUsuario(usuario.getUsuario()) == null) {
                 usuarioRepository.save(usuario);
-                return "Usuário criado com sucesso";
+                return Pair.of("Usuário criado com sucesso", HttpStatus.CREATED);
             } else {
-                return "Usuário Inválido";
+                return Pair.of("Usuário Inválido", HttpStatus.CONFLICT);
             }
         }
-        return "Email inválido";
+        return Pair.of("Email inválido", HttpStatus.CONFLICT);
     }
 
     public List<Usuario> listarTodosUsuarios() {
