@@ -12,6 +12,7 @@ Em desenvolvimento (Estágio Inicial)
 # Desenvolvedores
   * [Bryan Lemes](https://github.com/BryanMzili)
   * [Antônio Martins](https://github.com/AntonioMartinss)
+  * [Jhonatan Saraiva](https://github.com/jhojh)
 
 # Descrição do projeto
 Sistema Back-end de um site de jogos em Java Spring
@@ -32,6 +33,8 @@ Após a conclusão do processo de pagamento, o cliente receberá um código excl
 
 # Executar
 ## Banco de Dados
+[Baixar o MongoDB Community](https://www.mongodb.com/try/download/community)
+Crie um Banco de dados chamado: Freela_DB, com uma collection chamada: usuarios, o restante das opções podem ser deixadas com as escolhas padrão.
 
 ## Front-end
   * [Link do Repositório](https://github.com/AntonioMartinss/freela_front)
