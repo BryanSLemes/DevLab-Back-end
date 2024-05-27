@@ -17,8 +17,9 @@ public class UsuarioService {
             if (usuarioRepository.findByUsuario(usuario.getUsuario()) == null) {
                 usuarioRepository.save(usuario);
                 return "Usuário criado com sucesso";
+            } else {
+                return "Usuário Inválido";
             }
-            return "Nome de usuário inválido";
         }
         return "Email inválido";
     }
