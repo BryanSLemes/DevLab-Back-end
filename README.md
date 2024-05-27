@@ -1,19 +1,19 @@
 # Freela-Back-end
 
 ## Status Atual do Projeto
-Em desenvolvimento(Estágio Inicial)
+Em desenvolvimento (Estágio Inicial)
 
 # Tecnologias
 
-### Java
-### Spring Web
-### MongoDB
+- ### Java
+- ### Spring Web
+- ### MongoDB
 
 # Desenvolvedores
   * [Bryan Lemes](https://github.com/BryanMzili)
   * [Antônio Martins](https://github.com/AntonioMartinss)
 
-## Descrição do projeto
+# Descrição do projeto
 Sistema Back-end de um site de jogos em Java Spring
 
 <!--A proposta do projeto consiste em desenvolver uma aplicação de aluguel de quartos de hóteis. 
