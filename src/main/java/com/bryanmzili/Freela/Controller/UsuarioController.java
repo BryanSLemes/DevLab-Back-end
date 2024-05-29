@@ -50,4 +50,5 @@ public class UsuarioController {
 
         return new ResponseEntity<>("Login Falhou", HttpStatus.UNAUTHORIZED);
     }
+    
 }

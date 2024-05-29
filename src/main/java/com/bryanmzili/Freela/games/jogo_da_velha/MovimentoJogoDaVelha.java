@@ -1,6 +1,8 @@
 package com.bryanmzili.Freela.games.jogo_da_velha;
 
-public class Movimento {
+import com.bryanmzili.Freela.games.Jogada;
+
+public class MovimentoJogoDaVelha implements Jogada {
 
     private int linha;
     private int coluna;

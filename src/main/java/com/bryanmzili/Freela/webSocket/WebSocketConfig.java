@@ -12,5 +12,6 @@ public class WebSocketConfig implements WebSocketConfigurer {
     @Override
     public void registerWebSocketHandlers(WebSocketHandlerRegistry registry) {
         registry.addHandler(new JogoDaVelhaWebSocketHandler(), "/jogo-da-velha");
+        //registry.addHandler(new AnotherWebSocketHandler(), "/another-url"); //apenas defina a url
     }
 }

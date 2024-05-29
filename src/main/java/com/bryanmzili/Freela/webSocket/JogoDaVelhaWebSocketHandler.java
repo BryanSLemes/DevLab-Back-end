@@ -31,6 +31,7 @@ public class JogoDaVelhaWebSocketHandler extends TextWebSocketHandler {
             WebSocketSession otherPlayer = (game.getJogador1() == session) ? game.getJogador2() : game.getJogador1();
             jogosEmExecucao.remove(otherPlayer);
             game.lidarComJogadorDesconectado(session);
+            game.interrupt();
         }
     }
 

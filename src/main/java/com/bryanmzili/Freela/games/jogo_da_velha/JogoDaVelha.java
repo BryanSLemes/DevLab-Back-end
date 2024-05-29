@@ -1,23 +1,12 @@
 package com.bryanmzili.Freela.games.jogo_da_velha;
 
-public class JogoDaVelha {
+import com.bryanmzili.Freela.games.Game;
+import com.bryanmzili.Freela.games.Jogada;
+
+public class JogoDaVelha implements Game {
 
     private int[][] jogo = new int[3][3];
     private String vencedor;
-
-    public boolean isMovimentoValido(Movimento movimento, int jogadorAtual) {
-        int horizontal = movimento.getLinha();
-        int vertical = movimento.getColuna();
-
-        if (min1Max3(horizontal) && min1Max3(vertical)) {
-            if (jogo[horizontal - 1][vertical - 1] == 0) {
-                jogo[horizontal - 1][vertical - 1] = jogadorAtual;
-                return true;
-            }
-        }
-
-        return false;
-    }
 
     private boolean min1Max3(int numero) {
         if (numero >= 1 || numero <= 3) {
@@ -27,6 +16,7 @@ public class JogoDaVelha {
         return false;
     }
 
+    @Override
     public boolean isJogoFinalizado() {
 
         // Verificar se há uma linha horizontal com todos os elementos iguais
@@ -109,7 +99,25 @@ public class JogoDaVelha {
         return sb.toString();
     }
 
+    @Override
     public String getVencedor() {
         return vencedor;
+    }
+
+    @Override
+    public boolean isJogadaValida(Jogada jogada, int jogadorAtual) {
+        MovimentoJogoDaVelha movimento = (MovimentoJogoDaVelha) jogada;
+        int horizontal = movimento.getLinha();
+        int vertical = movimento.getColuna();
+
+        if (min1Max3(horizontal) && min1Max3(vertical)) {
+            if (jogo[horizontal - 1][vertical - 1] == 0) {
+                jogo[horizontal - 1][vertical - 1] = jogadorAtual;
+                return true;
+            }
+        }
+
+        return false;
+
     }
 }
