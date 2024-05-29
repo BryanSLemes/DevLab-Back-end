@@ -1,5 +1,6 @@
 package com.bryanmzili.Freela.controller;
 
+import com.bryanmzili.Freela.Sessoes;
 import com.bryanmzili.Freela.data.Usuario;
 import com.bryanmzili.Freela.service.UsuarioService;
 import jakarta.servlet.http.HttpServletRequest;
@@ -12,6 +13,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -49,6 +51,17 @@ public class UsuarioController {
         }
 
         return new ResponseEntity<>("Login Falhou", HttpStatus.UNAUTHORIZED);
+    }
+    
+    @GetMapping("/logado")
+    public ResponseEntity<String> isUsuarioLogado(HttpServletRequest request) {
+        Usuario usuario = Sessoes.lerSessaoUsuario(request);
+
+        if (usuario != null) {
+            return new ResponseEntity<>("Usuário Logado", HttpStatus.OK);
+        }
+
+        return new ResponseEntity<>("Usuário deve efetuar login", HttpStatus.UNAUTHORIZED);
     }
     
 }
