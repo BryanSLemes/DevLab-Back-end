@@ -4,12 +4,9 @@
 
 > Status: Em desenvolvimento 👨‍💻
 
-<br>
-
 # Sobre o projeto
     Sistema Back-end de um site de jogos em Java Spring
 
-<br>
 
 <!--
   Sobre o projeto:
