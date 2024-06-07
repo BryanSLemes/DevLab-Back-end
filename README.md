@@ -1,6 +1,6 @@
-# Freela-Back-end
+# DevLab-Back-end
 
-[![NPM](https://img.shields.io/npm/l/react)](https://github.com/BryanSLemes/Freela-Back-end/blob/master/LICENSE)
+[![NPM](https://img.shields.io/npm/l/react)](https://github.com/BryanSLemes/DevLab-Back-end/blob/master/LICENSE)
 
 > Status: Em desenvolvimento 👨‍💻
 
@@ -45,7 +45,7 @@ Opções de jogos:
 
   ```bash
   # criar ou selecionar banco de dados
-  use Freela_DB
+  use DevLab_DB
 
   # criar collection
   db.createCollection("usuarios")
@@ -61,10 +61,10 @@ Opções de jogos:
 
   ```bash
   # clonar repositório
-  git clone https://github.com/BryanSLemes/Freela-Back-end
+  git clone https://github.com/BryanSLemes/DevLab-Back-end
 
   # entrar na pasta do projeto
-  cd Freela-Back-End
+  cd DevLab-Back-End
   
   # executar o projeto
   ./mvnw spring-boot:run

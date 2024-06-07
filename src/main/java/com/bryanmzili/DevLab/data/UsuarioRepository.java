@@ -1,4 +1,4 @@
-package com.bryanmzili.Freela.data;
+package com.bryanmzili.DevLab.data;
 
 import org.springframework.data.mongodb.repository.MongoRepository;
 import org.springframework.stereotype.Repository;

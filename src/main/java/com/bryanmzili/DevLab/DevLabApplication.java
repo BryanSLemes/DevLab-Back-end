@@ -1,13 +1,13 @@
-package com.bryanmzili.Freela;
+package com.bryanmzili.DevLab;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication
-public class FreelaApplication {
+public class DevLabApplication {
 
 	public static void main(String[] args) {
-		SpringApplication.run(FreelaApplication.class, args);
+		SpringApplication.run(DevLabApplication.class, args);
 	}
 
 }

@@ -1,4 +1,4 @@
-package com.bryanmzili.Freela.exception;
+package com.bryanmzili.DevLab.exception;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

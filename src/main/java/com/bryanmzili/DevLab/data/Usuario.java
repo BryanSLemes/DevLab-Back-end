@@ -1,4 +1,4 @@
-package com.bryanmzili.Freela.data;
+package com.bryanmzili.DevLab.data;
 
 import lombok.Data;
 import org.springframework.data.annotation.Id;

@@ -1,6 +1,6 @@
-package com.bryanmzili.Freela;
+package com.bryanmzili.DevLab;
 
-import com.bryanmzili.Freela.data.Usuario;
+import com.bryanmzili.DevLab.data.Usuario;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 

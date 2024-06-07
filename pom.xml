@@ -9,9 +9,9 @@
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
     <groupId>com.bryanmzili</groupId>
-    <artifactId>Freela</artifactId>
+    <artifactId>DevLab</artifactId>
     <version>0.0.1-SNAPSHOT</version>
-    <name>Freela</name>
+    <name>DevLab</name>
     <description>Sistema Back-end de um site de jogos em Java Spring</description>
     <properties>
         <java.version>17</java.version>

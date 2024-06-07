@@ -1,7 +1,7 @@
-package com.bryanmzili.Freela.controller;
+package com.bryanmzili.DevLab.controller;
 
-import com.bryanmzili.Freela.data.Usuario;
-import com.bryanmzili.Freela.service.UsuarioService;
+import com.bryanmzili.DevLab.data.Usuario;
+import com.bryanmzili.DevLab.service.UsuarioService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,7 +18,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping("Freela/usuario")
+@RequestMapping("DevLab/usuario")
 public class UsuarioController {
 
     @Autowired

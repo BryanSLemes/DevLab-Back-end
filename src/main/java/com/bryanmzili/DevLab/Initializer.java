@@ -1,4 +1,4 @@
-package com.bryanmzili.Freela;
+package com.bryanmzili.DevLab;
 
 import jakarta.annotation.PostConstruct;
 import org.springframework.stereotype.Component;

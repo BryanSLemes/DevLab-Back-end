@@ -1,6 +1,6 @@
-package com.bryanmzili.Freela.webSocket;
+package com.bryanmzili.DevLab.webSocket;
 
-import com.bryanmzili.Freela.games.jogo_da_velha.JogoDaVelhaServer;
+import com.bryanmzili.DevLab.games.jogo_da_velha.JogoDaVelhaServer;
 import java.util.Map;
 import org.springframework.web.socket.*;
 import org.springframework.web.socket.handler.TextWebSocketHandler;

@@ -1,4 +1,4 @@
-package com.bryanmzili.Freela.exception;
+package com.bryanmzili.DevLab.exception;
 
 public class CustomException extends RuntimeException {
 

@@ -1,4 +1,4 @@
-package com.bryanmzili.Freela.games.jogo_da_velha;
+package com.bryanmzili.DevLab.games.jogo_da_velha;
 
 import com.bryanmzili.Freela.games.GameServer;
 import com.bryanmzili.Freela.games.Jogada;

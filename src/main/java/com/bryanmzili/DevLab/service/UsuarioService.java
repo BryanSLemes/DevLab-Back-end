@@ -1,7 +1,7 @@
-package com.bryanmzili.Freela.service;
+package com.bryanmzili.DevLab.service;
 
-import com.bryanmzili.Freela.data.Usuario;
-import com.bryanmzili.Freela.data.UsuarioRepository;
+import com.bryanmzili.DevLab.data.Usuario;
+import com.bryanmzili.DevLab.data.UsuarioRepository;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.util.Pair;
