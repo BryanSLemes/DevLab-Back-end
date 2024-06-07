@@ -34,6 +34,9 @@ Opções de jogos:
   * [Bryan Lemes](https://github.com/bryanslemes)
   * [Antônio Martins](https://github.com/AntonioMartinss)
 
+## UX & UI Designer
+  * [Henrique Pimentel](https://www.behance.net/HenriquePimentelCs)
+
 <br>
 
 # Como Executar o projeto
