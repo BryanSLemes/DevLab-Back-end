@@ -57,7 +57,7 @@ Opções de jogos:
 <br>
 
 ## Front-end
-  *  [Link do Repositório](https://github.com/AntonioMartinss/freela_front)
+  *  [Link do Repositório](https://github.com/AntonioMartinss/DevLab_front_end)
 
 ## Back-end (este repositório)
   Pré-requisito: Java 17
