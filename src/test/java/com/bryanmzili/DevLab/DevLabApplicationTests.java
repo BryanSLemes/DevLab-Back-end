@@ -1,10 +1,10 @@
-package com.bryanmzili.Freela;
+package com.bryanmzili.DevLab;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
 @SpringBootTest
-class FreelaApplicationTests {
+class DevLabApplicationTests {
 
 	@Test
 	void contextLoads() {

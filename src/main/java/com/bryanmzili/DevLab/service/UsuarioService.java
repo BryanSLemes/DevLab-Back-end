@@ -3,6 +3,8 @@ package com.bryanmzili.DevLab.service;
 import com.bryanmzili.DevLab.data.Usuario;
 import com.bryanmzili.DevLab.data.UsuarioRepository;
 import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.util.Pair;
 import org.springframework.http.HttpStatus;
@@ -18,6 +20,14 @@ public class UsuarioService {
     private EncryptionService encryptionService;
 
     public Pair<String, HttpStatus> criarUsuario(Usuario usuario) {
+        String regexUser = "^[a-z0-9_-]+$";
+        Pattern patternUsuario = Pattern.compile(regexUser);
+        Matcher matcherUser = patternUsuario.matcher(usuario.getUsuario());
+
+        if (!matcherUser.matches()) {
+            return Pair.of("Usuário contém caracteres inválidos", HttpStatus.UNPROCESSABLE_ENTITY);
+        }
+
         if (usuarioRepository.findByEmail(usuario.getEmail()) == null) {
             if (usuarioRepository.findByUsuario(usuario.getUsuario()) == null) {
                 usuario.setSenha(encryptionService.encrypt(usuario.getSenha()));
@@ -57,5 +67,5 @@ public class UsuarioService {
     public Usuario listarUsuarioById(String id) {
         return usuarioRepository.findById(id).orElse(null);
     }
-    
+
 }

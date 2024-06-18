@@ -53,9 +53,9 @@ public class UsuarioController {
         ObjectMapper objectMapper = new ObjectMapper();
 
         try {
-            Usuario user = objectMapper.readValue(token, Usuario.class);
+            Usuario user = objectMapper.readValue(token.replaceAll("'", "\""), Usuario.class);
             Usuario usuarioLogado = usuarioService.listarUsuarioByUsuarioAndSenhaEncripted(user);
-
+            
             if (usuarioLogado != null) {
                 return new ResponseEntity<>("Usuário Logado", HttpStatus.OK);
             }

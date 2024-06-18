@@ -28,4 +28,13 @@ public class Usuario {
     @NotBlank(message = "Email é obrigatório")
     @Email(message = "Email inválido")
     private String email;
+
+    public void setUsuario(String usuario) {
+        this.usuario = usuario.toLowerCase();
+    }
+
+    public void setEmail(String email) {
+        this.email = email.toLowerCase();
+    }
+
 }

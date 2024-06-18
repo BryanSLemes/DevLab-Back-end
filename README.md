@@ -60,7 +60,7 @@ Opções de jogos:
   *  [Link do Repositório](https://github.com/AntonioMartinss/freela_front)
 
 ## Back-end (este repositório)
-  Pré-requisito: Java 17
+  Pré-requisito: Java 17 ou superior
 
   ```bash
   # clonar repositório

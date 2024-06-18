@@ -1,5 +1,7 @@
 package com.bryanmzili.DevLab.exception;
 
+import java.util.ArrayList;
+import java.util.List;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotReadableException;
@@ -12,7 +14,7 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(Exception.class)
     public ResponseEntity<String> handleAllExceptions(Exception ex, WebRequest request) {
-        if (ex.getMessage().contains("No static resource")) {
+        if (IfContains(ex.getMessage())) {
             return new ResponseEntity<>("Recurso não encontrado", HttpStatus.NOT_FOUND);
         }
 
@@ -28,6 +30,21 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(MissingRequestBodyException.class)
     public final ResponseEntity<String> handleMissingRequestBodyException(MissingRequestBodyException ex, WebRequest request) {
         return new ResponseEntity<>("Formato de parâmetro inválido", HttpStatus.BAD_REQUEST);
+    }
+
+    private boolean IfContains(String mensagemExcecao) {
+        List<String> mensagens = new ArrayList();
+
+        mensagens.add("No static resource");
+        mensagens.add("Request method 'POST' is not supported");
+        mensagens.add("Request method 'GET' is not supported");
+
+        for (String mensagem : mensagens) {
+            if (mensagemExcecao.contains(mensagem)) {
+                return true;
+            }
+        }
+        return false;
     }
 
 }
