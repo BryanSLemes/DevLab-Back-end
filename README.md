@@ -5,7 +5,7 @@
 > Status: Em desenvolvimento 👨‍💻
 
 # Sobre o projeto
-    Sistema Back-end de um site de jogos em Java Spring
+O projeto consiste no desenvolvimento de um site/plataforma de jogos online. Alguns jogos que foram ou serão implementados serão: Jogo da Velha, Xadrez, Dama, Campo minado, entre outros que serão adicionados ao longo do tempo.
 
 
 <!--
@@ -57,7 +57,7 @@ Opções de jogos:
 <br>
 
 ## Front-end
-  *  [Link do Repositório](https://github.com/AntonioMartinss/freela_front)
+  *  [Link do Repositório](https://github.com/AntonioMartinss/DevLab_front_end)
 
 ## Back-end (este repositório)
   Pré-requisito: Java 17 ou superior
