@@ -1,11 +1,13 @@
 package com.bryanmzili.DevLab.service;
 
+import com.bryanmzili.DevLab.EncryptionDecryptionUtil;
 import com.bryanmzili.DevLab.data.Usuario;
 import com.bryanmzili.DevLab.data.UsuarioRepository;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.util.Pair;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
@@ -16,8 +18,11 @@ public class UsuarioService {
     @Autowired
     UsuarioRepository usuarioRepository;
 
-    @Autowired
-    private EncryptionService encryptionService;
+    private EncryptionDecryptionUtil encryptionService;
+
+    public UsuarioService(@Value("${jasypt.encryptor.password}") String encryptionKey) {
+        encryptionService = new EncryptionDecryptionUtil(encryptionKey);
+    }
 
     public Pair<String, HttpStatus> criarUsuario(Usuario usuario) {
         String regexUser = "^[a-z0-9_-]+$";
@@ -30,7 +35,7 @@ public class UsuarioService {
 
         if (usuarioRepository.findByEmail(usuario.getEmail()) == null) {
             if (usuarioRepository.findByUsuario(usuario.getUsuario()) == null) {
-                usuario.setSenha(encryptionService.encrypt(usuario.getSenha()));
+                usuario.setSenha(encryptionService.encode(usuario.getSenha()));
                 usuarioRepository.save(usuario);
                 return Pair.of("Usuário criado com sucesso", HttpStatus.CREATED);
             } else {
@@ -40,24 +45,14 @@ public class UsuarioService {
         return Pair.of("Email inválido", HttpStatus.CONFLICT);
     }
 
-    public Usuario listarUsuarioByUsuarioAndSenha(Usuario usuario) {
+    public Usuario listarUsuarioByUsuarioAndSenhaEncripted(Usuario usuario) {
         Usuario nomeUsuario = usuarioRepository.findByUsuario(usuario.getUsuario());
-
         if (nomeUsuario != null) {
-            String decryptedSenha = encryptionService.decrypt(nomeUsuario.getSenha());
-
-            if (usuario.getSenha().equals(decryptedSenha)) {
+            if (encryptionService.matches(nomeUsuario.getSenha(), usuario.getSenha())) {
                 return nomeUsuario;
             }
         }
-
         return null;
-    }
-
-    public Usuario listarUsuarioByUsuarioAndSenhaEncripted(Usuario usuario) {
-        usuario.setSenha(encryptionService.decrypt(usuario.getSenha()));
-
-        return listarUsuarioByUsuarioAndSenha(usuario);
     }
 
     public List<Usuario> listarTodosUsuarios() {

@@ -1,7 +1,7 @@
 package com.bryanmzili.DevLab.games.jogo_da_velha;
 
-import com.bryanmzili.Freela.games.GameServer;
-import com.bryanmzili.Freela.games.Jogada;
+import com.bryanmzili.DevLab.games.GameServer;
+import com.bryanmzili.DevLab.games.Jogada;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.web.socket.TextMessage;
 import org.springframework.web.socket.WebSocketSession;

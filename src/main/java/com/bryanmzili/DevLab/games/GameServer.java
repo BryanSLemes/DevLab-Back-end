@@ -1,4 +1,4 @@
-package com.bryanmzili.Freela.games;
+package com.bryanmzili.DevLab.games;
 
 import java.io.IOException;
 import org.springframework.web.socket.WebSocketSession;

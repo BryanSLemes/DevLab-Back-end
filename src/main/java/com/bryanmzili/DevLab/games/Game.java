@@ -1,4 +1,4 @@
-package com.bryanmzili.Freela.games;
+package com.bryanmzili.DevLab.games;
 
 public interface Game {
 

@@ -1,6 +1,6 @@
 package com.bryanmzili.DevLab.games.jogo_da_velha;
 
-import com.bryanmzili.Freela.games.Jogada;
+import com.bryanmzili.DevLab.games.Jogada;
 
 public class MovimentoJogoDaVelha implements Jogada {
 
