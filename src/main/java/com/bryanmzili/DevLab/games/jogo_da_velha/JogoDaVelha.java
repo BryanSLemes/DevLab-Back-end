@@ -27,7 +27,7 @@ public class JogoDaVelha implements Game {
             int casa3 = jogo[linha][2];
 
             if (casa1 == casa2 && casa2 == casa3 && casa1 != 0) {
-                vencedor = "Jogador " + casa1 + " venceu o Jogo \n" + this.toString();
+                vencedor = "Jogador " + casa1 + " venceu o Jogo \n";
                 return true;
             }
         }
@@ -40,7 +40,7 @@ public class JogoDaVelha implements Game {
             int casa3 = jogo[2][coluna];
 
             if (casa1 == casa2 && casa2 == casa3 && casa1 != 0) {
-                vencedor = "Jogador " + casa1 + " venceu o Jogo \n" + this.toString();
+                vencedor = "Jogador " + casa1 + " venceu o Jogo \n";
                 return true;
             }
         }
@@ -56,13 +56,13 @@ public class JogoDaVelha implements Game {
 
         //Testando Diagonal da Esquerda para a Direita
         if (ponta1 == meio && meio == ponta4 && meio != 0) {
-            vencedor = "Jogador " + meio + " venceu o Jogo \n" + this.toString();
+            vencedor = "Jogador " + meio + " venceu o Jogo \n";
             return true;
         }
 
         //Testando Diagonal da Direita para a Esquerda
         if (ponta2 == meio && meio == ponta3 && meio != 0) {
-            vencedor = "Jogador " + meio + " venceu o Jogo \n" + this.toString();
+            vencedor = "Jogador " + meio + " venceu o Jogo \n";
             return true;
         }
 
@@ -75,7 +75,7 @@ public class JogoDaVelha implements Game {
             }
         }
 
-        vencedor = "O Jogo Finalizou com Empate\n" + this.toString();
+        vencedor = "O Jogo Finalizou com Empate\n";
 
         return true;
     }
@@ -118,6 +118,5 @@ public class JogoDaVelha implements Game {
         }
 
         return false;
-
     }
 }

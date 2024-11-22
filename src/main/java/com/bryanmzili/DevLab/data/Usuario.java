@@ -15,7 +15,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 
 @Data
 @Document(collection = "usuarios")
-public class Usuario implements UserDetails{
+public class Usuario implements UserDetails {
 
     @Id
     private String id;
@@ -55,6 +55,13 @@ public class Usuario implements UserDetails{
     @Override
     public String getUsername() {
         return usuario;
+    }
+
+    public String toJson() {
+        return "{"
+                + "\"usuario\":" + "\"" + this.usuario + "\","
+                + "\"email\":" + "\"" + this.email + "\""
+                + "}";
     }
 
 }

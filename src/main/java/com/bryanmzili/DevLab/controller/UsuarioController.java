@@ -20,6 +20,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -79,8 +80,20 @@ public class UsuarioController {
     }
 
     @GetMapping("/logado")
-    public ResponseEntity<String> isUsuarioLogado() {
-        return new ResponseEntity<>("Usuário Logado", HttpStatus.OK);
+    public ResponseEntity<String> isUsuarioLogado(@RequestHeader("Authorization") String token) {
+        try {
+            String subject = this.tokenService.getSubject(token);
+            Usuario usuarioLogado = this.usuarioService.listarInfoUsuario(subject);
+
+            if (usuarioLogado != null) {
+                usuarioLogado.setSenha(null);
+                return new ResponseEntity<>(usuarioLogado.toJson(), HttpStatus.OK);
+            }
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+        }
+
+        return new ResponseEntity<>("Token inválido", HttpStatus.UNAUTHORIZED);
     }
 
     private Usuario decryptUser(EncryptedData encryptedData) throws Exception {

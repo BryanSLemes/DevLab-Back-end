@@ -63,4 +63,8 @@ public class UsuarioService {
         return usuarioRepository.findById(id).orElse(null);
     }
 
+    public Usuario listarInfoUsuario(String usuario) {
+        return usuarioRepository.findByUsuario(usuario);
+    }
+
 }

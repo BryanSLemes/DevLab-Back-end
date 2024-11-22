@@ -173,7 +173,7 @@ sessionStorage.setItem("token", data);
 
 ```javascript
 Status: 401
-Response Body:Login Falhou
+Response Body: Login Falhou
 ```
 
 <br>
@@ -191,7 +191,10 @@ fetch('http://localhost:8080/DevLab/usuario/logado', {
   }
 })
 .then(response => {
-  console.log(response.text());
+  return response.text();
+})
+.then(data => {
+  console.log(JSON.parse(data));
 })
 .catch(error => {
   console.error('Erro:', error);
@@ -201,7 +204,18 @@ fetch('http://localhost:8080/DevLab/usuario/logado', {
 
 ```javascript
 Status: 200
-Response Body: Usuário Logado
+Response Body: /*Será retornado um JSON com algumas informações do usuário*/
+
+{    
+  "usuario": "Rafael",
+  "email": "rafael@example.com"
+}
+```
+
+```javascript
+/*Token inválido*/
+Status: 401
+Response Body: Token inválido
 ```
 
 ```javascript
@@ -212,7 +226,7 @@ Response Body: /*o corpo da resposta virá vazio*/
 
 <br>
 
-<h2 id="criptografia">Criptografar dados a serem enviados ao servidor</h2>
+<h2 id="criptografia">Criptografar dados que serão enviados ao servidor</h2>
 
 Este tópico abordará sobre a necessidade de criptografar os dados que serão enviados para servidor.
 

@@ -38,6 +38,7 @@ public class JogoDaVelhaServer extends GameServer {
         enviarMensagemParaAmbosJogadores(getGame().toString());
 
         enviarMensagem(jogadorAtual, "Sua vez.");
+        enviarMensagem(jogadorAdversario(), "Vez do adversário");
     }
 
     @Override
@@ -52,12 +53,14 @@ public class JogoDaVelhaServer extends GameServer {
         if (getGame().isJogadaValida(movimento, ((jogadorAtual == getJogador1()) ? 1 : 2))) {
             if (getGame().isJogoFinalizado()) {
                 enviarMensagemParaAmbosJogadores(getGame().getVencedor());
+                enviarMensagemParaAmbosJogadores(getGame().toString());
                 jogador1.close();
             } else {
                 enviarMensagemParaAmbosJogadores(getGame().toString());
 
                 jogadorAtual = (jogadorAtual == getJogador1()) ? getJogador2() : getJogador1();
                 enviarMensagem(jogadorAtual, "Sua vez.");
+                enviarMensagem(jogadorAdversario(), "Vez do adversário");
             }
         } else {
             enviarMensagem(sessao, "Movimento inválido!");
@@ -92,5 +95,9 @@ public class JogoDaVelhaServer extends GameServer {
 
     public WebSocketSession getJogador2() {
         return jogador2;
+    }
+    
+    private WebSocketSession jogadorAdversario(){
+        return (jogadorAtual == getJogador1()) ? getJogador2() : getJogador1();
     }
 }
