@@ -49,8 +49,11 @@ Os usuários podem se registrar na plataforma e, após efetuarem login, acessar 
 # criar ou selecionar banco de dados
 use DevLab_DB
 
-# criar collection
+# criar collection usuarios
 db.createCollection("usuarios")
+
+# criar collection partidas
+db.createCollection("partidas")
 ```
 
 ## Front-end
@@ -72,9 +75,7 @@ cd DevLab-Back-End
 
 <h2 id="endpoints">Endpoints da Aplicação</h2>
 
-Considerando que a URL raiz da plataforma é http://ip:8080/DevLab ,temos os seguinte endpoints:
-
-
+Considerando que a URL raiz da plataforma é http://ip:8080/DevLab ,temos os seguintes endpoints:
 
 <b>Obs: 
   * Substitua "ip" da URL pelo IP da sua máquina.
@@ -222,6 +223,163 @@ Response Body: Token inválido
 /*Credencial inválida*/
 Status: 403
 Response Body: /*o corpo da resposta virá vazio*/
+```
+
+<br>
+
+### WEB SOCKET JOGO DA VELHA
+
+```markdown
+WS /jogo-da-velha?token=SEU_TOKEN_JWT - Abrir conexão WebSocket com autenticação via token
+```
+```javascript
+//Exemplo de conexão WebSocket com com autenticação via token
+socket = new WebSocket('ws://localhost:8080/DevLab/jogo-da-velha?token=' + sessionStorage.getItem("token"));
+
+socket.onopen = function (event) {
+  console.log('Conexão WebSocket aberta:', event);
+};
+
+socket.onmessage = function (event) {
+  console.log('Mensagem recebida do servidor:', event.data);
+};
+
+socket.onerror = function (error) {
+  console.error('Erro na conexão WebSocket:', error);
+};
+
+socket.onclose = function (event) {
+  if (event.wasClean) {
+    console.log('Conexão fechada de forma limpa.');
+  } else {
+    console.log('Conexão fechada de forma inesperada.');
+  }
+}
+```
+## Possíveis Respostas:
+
+### Respostas de Estado da Conexão WebSocket
+
+<b>Obs:</b>
+A propriedade readyState indica o estado atual da conexão WebSocket e pode ser acessada diretamente a partir da instância do socket
+
+```javascript
+var readyState = socket.readyState;
+```
+
+<!-- 
+readyState:
+0 - conectando
+1 - open
+2 - closing
+3 - closed
+ -->
+
+```javascript
+/*Conexão iniciada (tentando se conectar)*/
+Status: Conectando (`readyState: 0`)  
+Detalhes: /**A conexão WebSocket foi criada, mas ainda está no processo de conexão com o servidor.*/
+```
+
+```javascript
+/*Conexão estabelecida com sucesso*/
+Status: Conectado (`readyState: 1`)  
+Evento: `onopen`
+Detalhes: /*A conexão WebSocket está ativa e pronta para troca de mensagens.*/
+```
+
+```javascript
+/*Token inválido ou falha na autenticação*/
+Status: Conexão recusada (`readyState: 3`)  
+Evento: `onerror`
+Detalhes: /*A conexão WebSocket foi recusada.*/
+```
+
+```javascript
+/*Conexão encerrada ou perdida*/
+Status: Encerrado (`readyState: 3`)  
+Evento: `onclose`
+Detalhes: /*A conexão WebSocket foi encerrada.*/
+```
+
+### Respostas Durante a Partida
+<b>Obs: </b>
+* As respostas listadas abaixo serão recebidas enquanto a conexão WebSocket estiver aberta<br>(readyState === 1);<br>
+
+* As mensagens enviadas pelo servidor são tratadas por meio do evento onmessage;
+* O conteúdo da mensagem é acessado pela propriedade <b>event.data</b>;
+
+```javascript
+var readyState = socket.readyState;
+```
+
+```javascript
+Evento: `onmessage`
+Conteúdo: Jogo Iniciado!
+Detalhes: /*Indica que a partida foi iniciada com sucesso e os jogadores estão conectados.*/
+```
+
+```javascript
+Evento: `onmessage`
+Conteúdo: Sua vez.
+Detalhes: /*O servidor está notificando ao jogador de que é sua vez de jogar.*/
+```
+
+```javascript
+Evento: `onmessage`
+Conteúdo: Vez do adversário
+Detalhes: /*O servidor está notificando ao jogador de que é a vez do adversário de jogar.*/
+```
+
+```javascript
+Evento: `onmessage`
+Conteúdo: Não é sua vez
+Detalhes: /*O servidor está notificando ao jogador de que não é sua vez de jogar.*/
+```
+
+```javascript
+Evento: `onmessage`
+Conteúdo: Movimento inválido!
+Detalhes: /*O servidor rejeitou a jogada enviada por ser inválida segundo as regras do jogo.*/
+```
+
+```javascript
+Evento: `onmessage`
+Conteúdo: Você venceu a partida
+Detalhes: /*O jogo foi finalizado e o jogador venceu.*/
+```
+
+```javascript
+Evento: `onmessage`
+Conteúdo: Vitória do adversário
+Detalhes: /*O jogo foi finalizado e o adversário venceu.*/
+```
+
+```javascript
+Evento: `onmessage`
+Conteúdo: O outro jogador se desconectou. Fim da Partida.
+Detalhes: /*O jogo foi finalizado e o jogador ganhou por desistência do adversário*/
+```
+
+```javascript
+Evento: `onmessage`
+Conteúdo: Empate
+Detalhes: /*O jogo foi finalizado como empate*/
+```
+
+```javascript
+Evento: `onmessage`
+Conteúdo: 
+1 | 2 | 2 \n
+1 | 1 | 0 \n
+1 | 0 | 2 \n
+/*Neste exemplo, o jogador "X" venceu com uma coluna vertical completa na primeira coluna.*/
+
+Detalhes: Representação do tabuleiro do jogo da velha.  
+- 0: posição vazia  
+- 1: jogador "X"  
+- 2: jogador "O"  
+As linhas são separadas por "\n" e cada célula por " | "
 ```
 
 <br>

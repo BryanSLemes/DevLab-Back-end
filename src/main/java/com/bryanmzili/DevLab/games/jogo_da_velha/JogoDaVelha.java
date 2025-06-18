@@ -6,7 +6,7 @@ import com.bryanmzili.DevLab.games.Jogada;
 public class JogoDaVelha implements Game {
 
     private int[][] jogo = new int[3][3];
-    private String vencedor;
+    private int vencedor;
 
     private boolean min1Max3(int numero) {
         if (numero >= 1 || numero <= 3) {
@@ -27,7 +27,7 @@ public class JogoDaVelha implements Game {
             int casa3 = jogo[linha][2];
 
             if (casa1 == casa2 && casa2 == casa3 && casa1 != 0) {
-                vencedor = "Jogador " + casa1 + " venceu o Jogo \n";
+                vencedor = casa1;
                 return true;
             }
         }
@@ -40,7 +40,7 @@ public class JogoDaVelha implements Game {
             int casa3 = jogo[2][coluna];
 
             if (casa1 == casa2 && casa2 == casa3 && casa1 != 0) {
-                vencedor = "Jogador " + casa1 + " venceu o Jogo \n";
+                vencedor = casa1;
                 return true;
             }
         }
@@ -56,13 +56,13 @@ public class JogoDaVelha implements Game {
 
         //Testando Diagonal da Esquerda para a Direita
         if (ponta1 == meio && meio == ponta4 && meio != 0) {
-            vencedor = "Jogador " + meio + " venceu o Jogo \n";
+            vencedor = meio;
             return true;
         }
 
         //Testando Diagonal da Direita para a Esquerda
         if (ponta2 == meio && meio == ponta3 && meio != 0) {
-            vencedor = "Jogador " + meio + " venceu o Jogo \n";
+            vencedor = meio;
             return true;
         }
 
@@ -75,7 +75,7 @@ public class JogoDaVelha implements Game {
             }
         }
 
-        vencedor = "O Jogo Finalizou com Empate\n";
+        vencedor = 0;
 
         return true;
     }
@@ -100,7 +100,7 @@ public class JogoDaVelha implements Game {
     }
 
     @Override
-    public String getVencedor() {
+    public int getVencedor() {
         return vencedor;
     }
 

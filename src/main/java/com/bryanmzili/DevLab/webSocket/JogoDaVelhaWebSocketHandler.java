@@ -1,15 +1,16 @@
 package com.bryanmzili.DevLab.webSocket;
 
 import com.bryanmzili.DevLab.games.jogo_da_velha.JogoDaVelhaServer;
+import com.bryanmzili.DevLab.service.PartidaService;
 import java.util.Map;
 import org.springframework.web.socket.*;
 import org.springframework.web.socket.handler.TextWebSocketHandler;
-
 import java.util.Queue;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+import org.springframework.beans.factory.annotation.Autowired;
 
 public class JogoDaVelhaWebSocketHandler extends TextWebSocketHandler {
 

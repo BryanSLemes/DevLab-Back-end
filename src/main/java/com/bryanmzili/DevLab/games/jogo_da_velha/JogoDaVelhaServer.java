@@ -1,11 +1,15 @@
 package com.bryanmzili.DevLab.games.jogo_da_velha;
 
+import com.bryanmzili.DevLab.SpringContext;
+import com.bryanmzili.DevLab.data.Partida;
 import com.bryanmzili.DevLab.games.GameServer;
 import com.bryanmzili.DevLab.games.Jogada;
+import com.bryanmzili.DevLab.service.PartidaService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.web.socket.TextMessage;
 import org.springframework.web.socket.WebSocketSession;
 import java.io.IOException;
+import java.util.Date;
 
 public class JogoDaVelhaServer extends GameServer {
 
@@ -13,12 +17,15 @@ public class JogoDaVelhaServer extends GameServer {
     private final WebSocketSession jogador2;
     private WebSocketSession jogadorAtual;
     private final ObjectMapper objectMapper = new ObjectMapper();
+    private PartidaService partidaService;
+    private boolean finalizadoManual = false;
 
     public JogoDaVelhaServer(WebSocketSession player1, WebSocketSession player2) {
         super(new JogoDaVelha());
         this.jogador1 = player1;
         this.jogador2 = player2;
         this.jogadorAtual = player1; //O Jogador 1 começa o jogo
+        this.partidaService = SpringContext.getBean(PartidaService.class);
     }
 
     @Override
@@ -32,8 +39,8 @@ public class JogoDaVelhaServer extends GameServer {
 
     @Override
     public void iniciarJogo() throws IOException {
-        enviarMensagem(getJogador1(), "Jogo Iniciado! Você está jogando contra:" + getJogador2().getId() + "\nSeu ID: " + getJogador1().getId());
-        enviarMensagem(getJogador2(), "Jogo Iniciado! Você está jogando contra:" + getJogador1().getId() + "\nSeu ID: " + getJogador2().getId());
+        enviarMensagem(getJogador1(), "Jogo Iniciado!");
+        enviarMensagem(getJogador2(), "Jogo Iniciado!");
 
         enviarMensagemParaAmbosJogadores(getGame().toString());
 
@@ -52,8 +59,30 @@ public class JogoDaVelhaServer extends GameServer {
 
         if (getGame().isJogadaValida(movimento, ((jogadorAtual == getJogador1()) ? 1 : 2))) {
             if (getGame().isJogoFinalizado()) {
-                enviarMensagemParaAmbosJogadores(getGame().getVencedor());
                 enviarMensagemParaAmbosJogadores(getGame().toString());
+                finalizadoManual = true;
+                
+                int vencedor = getGame().getVencedor();
+                
+                switch (vencedor) {
+                    case 1 -> {
+                        enviarMensagem(jogador1, "Você venceu a partida");
+                        enviarMensagem(jogador2, "Vitória do adversário");
+                    }
+                    case 2 -> {
+                        enviarMensagem(jogador2, "Você venceu a partida");
+                        enviarMensagem(jogador1, "Vitória do adversário");
+                    }
+                    default -> enviarMensagemParaAmbosJogadores("Empate");
+                }
+                
+                montarPartida(
+                        (String) jogador1.getAttributes().get("idUsuario"),
+                        (String) jogador2.getAttributes().get("idUsuario"),
+                        vencedor,
+                        "finalizada"
+                );
+                
                 jogador1.close();
             } else {
                 enviarMensagemParaAmbosJogadores(getGame().toString());
@@ -69,9 +98,17 @@ public class JogoDaVelhaServer extends GameServer {
 
     @Override
     public void lidarComJogadorDesconectado(WebSocketSession session) throws IOException {
+        if (finalizadoManual) return; // Evita lógica dupla
+        
         WebSocketSession outroJogador = (session == getJogador1()) ? getJogador2() : getJogador1();
         if (outroJogador.isOpen()) {
             enviarMensagem(outroJogador, "O outro jogador se desconectou. Fim da Partida.");
+            montarPartida(
+                    (String) jogador1.getAttributes().get("idUsuario"),
+                    (String) jogador2.getAttributes().get("idUsuario"),
+                    (outroJogador == getJogador1()) ? 1 : 2,
+                    "desistência"
+            );
             outroJogador.close();
         }
     }
@@ -99,5 +136,22 @@ public class JogoDaVelhaServer extends GameServer {
     
     private WebSocketSession jogadorAdversario(){
         return (jogadorAtual == getJogador1()) ? getJogador2() : getJogador1();
+    }
+    
+    private void montarPartida(String idJogador1, String idJogador2, int vencedor, String status){
+        Partida partida = new Partida();
+        
+        partida.setJogador1(idJogador1);
+        partida.setJogador2(idJogador2);
+        partida.setData(new Date());
+        partida.setStatus(status);
+        
+        switch (vencedor) {
+            case 1 -> partida.setVencedor(idJogador1);
+            case 2 -> partida.setVencedor(idJogador2);
+            default -> partida.setVencedor("");
+        }
+        
+        partidaService.salvarPartida(partida);
     }
 }

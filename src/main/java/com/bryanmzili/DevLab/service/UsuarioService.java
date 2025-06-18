@@ -38,9 +38,8 @@ public class UsuarioService {
                 usuario.setSenha(encryptionService.encode(usuario.getSenha()));
                 usuarioRepository.save(usuario);
                 return Pair.of("Usuário criado com sucesso", HttpStatus.CREATED);
-            } else {
-                return Pair.of("Usuário Inválido", HttpStatus.CONFLICT);
-            }
+            } 
+            return Pair.of("Usuário Inválido", HttpStatus.CONFLICT);
         }
         return Pair.of("Email inválido", HttpStatus.CONFLICT);
     }

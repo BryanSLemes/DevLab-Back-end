@@ -6,5 +6,5 @@ public interface Game {
 
     public boolean isJogoFinalizado();
 
-    public String getVencedor();
+    public int getVencedor();
 }
