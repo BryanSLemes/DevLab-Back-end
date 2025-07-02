@@ -32,6 +32,11 @@ public class JwtHandshakeInterceptor implements HandshakeInterceptor {
                 if (usuarioLogado != null) {
                     attributes.put("idUsuario", usuarioLogado.getId());
                     attributes.put("usuario", usuarioLogado.getUsuario());
+                    if(usuarioLogado.isOnline()){
+                        return false;
+                    }
+                    usuarioLogado.setOnline(true);
+                    this.usuarioService.atualizarUsuario(usuarioLogado);
                     return true;
                 }
             } catch (Exception e) {}

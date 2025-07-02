@@ -5,7 +5,7 @@ import org.springframework.web.socket.WebSocketSession;
 
 public abstract class GameServer extends Thread {
 
-    private Game game;
+    private final Game game;
 
     public GameServer(Game game) {
         this.game = game;

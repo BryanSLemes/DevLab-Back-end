@@ -33,6 +33,8 @@ public class Usuario implements UserDetails {
     @NotBlank(message = "Email é obrigatório")
     @Email(message = "Email inválido")
     private String email;
+    
+    private boolean online = false;
 
     public void setUsuario(String usuario) {
         this.usuario = usuario.toLowerCase();
@@ -55,6 +57,14 @@ public class Usuario implements UserDetails {
     @Override
     public String getUsername() {
         return usuario;
+    }
+    
+     public boolean isOnline() {
+        return online;
+    }
+
+    public void setOnline(boolean online) {
+        this.online = online;
     }
 
     public String toJson() {

@@ -289,7 +289,7 @@ Detalhes: /*A conexão WebSocket está ativa e pronta para troca de mensagens.*/
 ```
 
 ```javascript
-/*Token inválido ou falha na autenticação*/
+/*Token inválido / falha na autenticação ou Jogador já está em outra partida*/
 Status: Conexão recusada (`readyState: 3`)  
 Evento: `onerror`
 Detalhes: /*A conexão WebSocket foi recusada.*/

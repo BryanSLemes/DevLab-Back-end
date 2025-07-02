@@ -18,7 +18,7 @@ public class UsuarioService {
     @Autowired
     UsuarioRepository usuarioRepository;
 
-    private EncryptionDecryptionUtil encryptionService;
+    private final EncryptionDecryptionUtil encryptionService;
 
     public UsuarioService(@Value("${jasypt.encryptor.password}") String encryptionKey) {
         encryptionService = new EncryptionDecryptionUtil(encryptionKey);
@@ -52,6 +52,10 @@ public class UsuarioService {
             }
         }
         return null;
+    }
+    
+    public Usuario atualizarUsuario(Usuario usuario) {
+        return usuarioRepository.save(usuario);
     }
 
     public List<Usuario> listarTodosUsuarios() {

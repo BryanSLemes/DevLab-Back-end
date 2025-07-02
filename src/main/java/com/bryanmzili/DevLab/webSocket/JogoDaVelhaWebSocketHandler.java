@@ -1,7 +1,9 @@
 package com.bryanmzili.DevLab.webSocket;
 
+import com.bryanmzili.DevLab.SpringContext;
+import com.bryanmzili.DevLab.data.Usuario;
 import com.bryanmzili.DevLab.games.jogo_da_velha.JogoDaVelhaServer;
-import com.bryanmzili.DevLab.service.PartidaService;
+import com.bryanmzili.DevLab.service.UsuarioService;
 import java.util.Map;
 import org.springframework.web.socket.*;
 import org.springframework.web.socket.handler.TextWebSocketHandler;
@@ -10,7 +12,6 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
-import org.springframework.beans.factory.annotation.Autowired;
 
 public class JogoDaVelhaWebSocketHandler extends TextWebSocketHandler {
 
@@ -28,11 +29,13 @@ public class JogoDaVelhaWebSocketHandler extends TextWebSocketHandler {
     public void afterConnectionClosed(WebSocketSession session, CloseStatus status) throws Exception {
         esperaPorJogadores.remove(session);
         JogoDaVelhaServer game = jogosEmExecucao.remove(session);
+        setJogadorOffline(session);
         if (game != null) {
             WebSocketSession otherPlayer = (game.getJogador1() == session) ? game.getJogador2() : game.getJogador1();
             jogosEmExecucao.remove(otherPlayer);
+            setJogadorOffline(otherPlayer);
             game.lidarComJogadorDesconectado(session);
-            game.interrupt();
+            game.interrupt();  
         }
     }
 
@@ -56,4 +59,17 @@ public class JogoDaVelhaWebSocketHandler extends TextWebSocketHandler {
             executarGames.execute(game);
         }
     }
+    
+    private void setJogadorOffline(WebSocketSession session) {
+    Object idObj = session.getAttributes().get("idUsuario");
+    UsuarioService usuarioService = SpringContext.getBean(UsuarioService.class);
+    if (idObj instanceof String id) {
+        Usuario usuario = usuarioService.listarUsuarioById(id);
+        if (usuario != null) {
+            usuario.setOnline(false);
+            usuarioService.atualizarUsuario(usuario);
+        }
+    }
+}
+
 }
