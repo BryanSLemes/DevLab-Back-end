@@ -1,6 +1,6 @@
 package com.bryanmzili.DevLab.data;
 
-import java.util.Date;
+import java.time.LocalDateTime;
 import lombok.Data;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
@@ -18,14 +18,7 @@ public class Partida {
     
     private String vencedor;
     
-    private Date data;
+    private LocalDateTime data;
     
     private String status;   
-    
-    //    public String toJson() {
-    //        return "{"
-    //                + "\"usuario\":" + "\"" + this.usuario + "\","
-    //                + "\"email\":" + "\"" + this.email + "\""
-    //                + "}";
-    //    }
 }

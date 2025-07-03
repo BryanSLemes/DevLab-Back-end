@@ -181,7 +181,7 @@ Response Body: Login Falhou
 
 ### GET LOGADO
 ```markdown
-POST /usuario/logado - Verifica se a credencial do usuário é válida.
+GET /usuario/logado - Verifica se a credencial do usuário é válida.
 ```
 ```javascript
 //Exemplo de requisição para verificar credencial
@@ -223,6 +223,60 @@ Response Body: Token inválido
 /*Credencial inválida*/
 Status: 403
 Response Body: /*o corpo da resposta virá vazio*/
+```
+
+<br>
+
+### GET HISTÓRICO
+```markdown
+GET /usuario/historico - Retorna o histórico de partidas do usuário.
+```
+```javascript
+//Exemplo de requisição que retorna historico de partidas do usuario
+fetch('http://localhost:8080/DevLab/usuario/historico', {
+  method: 'GET',
+  headers: {
+    'Authorization': sessionStorage.getItem("token")
+  }
+})
+.then(response => {
+  return response.text();
+})
+.then(data => {
+  console.log(JSON.parse(data));
+})
+.catch(error => {
+  console.error('Erro:', error);
+});
+```
+### Possíveis Respostas:
+
+```javascript
+Status: 200
+Response Body: /*Será retornado um JSON com as partidas do usuário*/
+
+{
+  "jogador1":"Rafael",
+  "jogador2":"Pedro",
+  "vencedor":"Rafael",
+  "data":"02/07/2025 20:27:10",
+  "status":"finalizada"
+}
+
+//status pode vir como finalizada ou desistência
+{
+  "jogador1":"Rafael",
+  "jogador2":"Pedro",
+  "vencedor":"Pedro",
+  "data":"02/07/2025 20:27:15",
+  "status":"desistência"
+}
+```
+
+```javascript
+/*Token ou Credencial inválido*/
+Status: 403
+Response Body: Token inválido
 ```
 
 <br>

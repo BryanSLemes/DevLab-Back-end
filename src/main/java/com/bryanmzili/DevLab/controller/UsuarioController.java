@@ -2,12 +2,15 @@ package com.bryanmzili.DevLab.controller;
 
 import com.bryanmzili.DevLab.EncryptedData;
 import com.bryanmzili.DevLab.EncryptionDecryptionUtil;
+import com.bryanmzili.DevLab.data.PartidaViewDTO;
 import com.bryanmzili.DevLab.data.Usuario;
+import com.bryanmzili.DevLab.service.PartidaService;
 import com.bryanmzili.DevLab.service.TokenService;
 import com.bryanmzili.DevLab.service.UsuarioService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.validation.ConstraintViolation;
 import jakarta.validation.Validator;
+import java.util.List;
 import java.util.Set;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -32,6 +35,9 @@ public class UsuarioController {
     private UsuarioService usuarioService;
 
     @Autowired
+    private PartidaService partidaService;
+    
+    @Autowired
     private AuthenticationManager authenticationManager;
 
     @Autowired
@@ -40,7 +46,7 @@ public class UsuarioController {
     @Value("${chave.criptografia.privada}")
     private String privateKeyPEM;
 
-    private EncryptionDecryptionUtil encryptionDecryptionUtil = new EncryptionDecryptionUtil();
+    private final EncryptionDecryptionUtil encryptionDecryptionUtil = new EncryptionDecryptionUtil();
 
     @Autowired
     public UsuarioController(Validator validator) {
@@ -90,7 +96,24 @@ public class UsuarioController {
                 return new ResponseEntity<>(usuarioLogado.toJson(), HttpStatus.OK);
             }
         } catch (Exception e) {
-            System.out.println(e.getMessage());
+//            System.out.println(e.getMessage());
+        }
+
+        return new ResponseEntity<>("Token inválido", HttpStatus.UNAUTHORIZED);
+    }
+    
+    @GetMapping("/historico")
+    public ResponseEntity<?> historico(@RequestHeader("Authorization") String token) {
+        try {
+            String subject = this.tokenService.getSubject(token);
+            Usuario usuarioLogado = this.usuarioService.listarInfoUsuario(subject);
+
+            if (usuarioLogado != null) {
+                List<PartidaViewDTO> historico = partidaService.historico(usuarioLogado.getId());
+                return ResponseEntity.ok(historico);
+            }
+        } catch (Exception e) {
+//            System.out.println(e.getMessage());
         }
 
         return new ResponseEntity<>("Token inválido", HttpStatus.UNAUTHORIZED);

@@ -9,7 +9,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.web.socket.TextMessage;
 import org.springframework.web.socket.WebSocketSession;
 import java.io.IOException;
-import java.util.Date;
+import java.time.LocalDateTime;
 
 public class JogoDaVelhaServer extends GameServer {
 
@@ -143,7 +143,7 @@ public class JogoDaVelhaServer extends GameServer {
         
         partida.setJogador1(idJogador1);
         partida.setJogador2(idJogador2);
-        partida.setData(new Date());
+        partida.setData(LocalDateTime.now());
         partida.setStatus(status);
         
         switch (vencedor) {
