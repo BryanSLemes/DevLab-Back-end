@@ -417,6 +417,12 @@ Detalhes: /*O jogo foi finalizado e o jogador ganhou por desistência do advers�
 
 ```javascript
 Evento: `onmessage`
+Conteúdo: Você foi desconectado por inatividade.
+Detalhes: /*O jogo foi finalizado e o jogador perdeu por inatividade de 1:30 minutos*/
+```
+
+```javascript
+Evento: `onmessage`
 Conteúdo: Empate
 Detalhes: /*O jogo foi finalizado como empate*/
 ```

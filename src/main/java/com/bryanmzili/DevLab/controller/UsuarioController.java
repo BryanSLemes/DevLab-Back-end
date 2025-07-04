@@ -36,7 +36,7 @@ public class UsuarioController {
 
     @Autowired
     private PartidaService partidaService;
-    
+
     @Autowired
     private AuthenticationManager authenticationManager;
 
@@ -80,7 +80,6 @@ public class UsuarioController {
 
             return new ResponseEntity<>(tokenService.gerarToken(authenticatedUser), HttpStatus.OK);
         } catch (Exception e) {
-            System.out.println(e.getMessage());
             return new ResponseEntity<>("Login Falhou", HttpStatus.UNAUTHORIZED);
         }
     }
@@ -101,7 +100,7 @@ public class UsuarioController {
 
         return new ResponseEntity<>("Token inválido", HttpStatus.UNAUTHORIZED);
     }
-    
+
     @GetMapping("/historico")
     public ResponseEntity<?> historico(@RequestHeader("Authorization") String token) {
         try {
