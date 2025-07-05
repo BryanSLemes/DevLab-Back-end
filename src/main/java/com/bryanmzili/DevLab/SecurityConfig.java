@@ -38,6 +38,7 @@ public class SecurityConfig implements WebMvcConfigurer {
         http.authorizeHttpRequests((requests) -> requests
                 .requestMatchers("/DevLab/usuario/login").permitAll()
                 .requestMatchers("/DevLab/usuario/cadastro").permitAll()
+                .requestMatchers("/DevLab/usuario/troca-senha").permitAll()
                 .requestMatchers("/DevLab/jogo-da-velha").permitAll()
                 .anyRequest().authenticated()
         )

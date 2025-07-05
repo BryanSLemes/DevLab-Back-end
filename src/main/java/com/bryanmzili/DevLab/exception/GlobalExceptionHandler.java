@@ -17,8 +17,6 @@ public class GlobalExceptionHandler {
         if (IfContains(ex.getMessage())) {
             return new ResponseEntity<>("Recurso não encontrado", HttpStatus.NOT_FOUND);
         }
-
-        System.out.println("Erro Interno no Servidor: \n" + ex.getMessage());
         return new ResponseEntity<>("Erro Interno no Servidor", HttpStatus.INTERNAL_SERVER_ERROR);
     }
 
@@ -46,5 +44,5 @@ public class GlobalExceptionHandler {
         }
         return false;
     }
-    
+
 }

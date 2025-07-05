@@ -3,6 +3,7 @@ package com.bryanmzili.DevLab.controller;
 import com.bryanmzili.DevLab.EncryptedData;
 import com.bryanmzili.DevLab.EncryptionDecryptionUtil;
 import com.bryanmzili.DevLab.data.PartidaViewDTO;
+import com.bryanmzili.DevLab.data.TrocaSenhaDTO;
 import com.bryanmzili.DevLab.data.Usuario;
 import com.bryanmzili.DevLab.service.PartidaService;
 import com.bryanmzili.DevLab.service.TokenService;
@@ -114,11 +115,33 @@ public class UsuarioController {
         return new ResponseEntity<>("Token inválido", HttpStatus.UNAUTHORIZED);
     }
 
+    @PostMapping("/trocar-senha")
+    public ResponseEntity<String> trocarSenha(@RequestHeader("Authorization") String token, @RequestBody EncryptedData encryptedData) {
+        try {
+            String subject = this.tokenService.getSubject(token);
+            Usuario usuario = this.usuarioService.listarInfoUsuario(subject);
+            
+            if (usuario != null) {
+                TrocaSenhaDTO trocaSenhaDTO = decryptTrocaSenha(encryptedData);
+
+                return usuarioService.atualizarSenhaUsuario(usuario, trocaSenhaDTO);
+            }
+        } catch (Exception e) {}
+        return new ResponseEntity<>("Token inválido", HttpStatus.UNAUTHORIZED);
+    }
+
     private Usuario decryptUser(EncryptedData encryptedData) throws Exception {
         encryptionDecryptionUtil.setPrivateKeyPEM(privateKeyPEM);
         String decrypedData = encryptionDecryptionUtil.decryptMessage(encryptedData.getData());
         ObjectMapper objectMapper = new ObjectMapper();
         return objectMapper.readValue(decrypedData, Usuario.class);
+    }
+
+    private TrocaSenhaDTO decryptTrocaSenha(EncryptedData encryptedData) throws Exception {
+        encryptionDecryptionUtil.setPrivateKeyPEM(privateKeyPEM);
+        String decrypedData = encryptionDecryptionUtil.decryptMessage(encryptedData.getData());
+        ObjectMapper objectMapper = new ObjectMapper();
+        return objectMapper.readValue(decrypedData, TrocaSenhaDTO.class);
     }
 
     private ResponseEntity<String> verificarCadastro(Usuario usuario) {

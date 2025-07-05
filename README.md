@@ -282,6 +282,64 @@ Response Body: Token inválido
 
 <br>
 
+### POST TROCAR SENHA
+```markdown
+POST /usuario/trocar-senha - Efetuar troca de senha do usuário.
+```
+```javascript
+let formData = {
+  data: encrypt({    
+    senhaAtual: 'senha123',
+    novaSenha: 'senha1234'
+  })
+};
+
+fetch('http://localhost:8080/DevLab/usuario/trocar-senha', {
+  method: 'POST',
+  headers: {
+    'Content-Type': 'application/json',
+    'Authorization': sessionStorage.getItem("token")
+  },
+  body: JSON.stringify(formData)
+})
+.then(response => {
+  return response.text();
+})
+.then(data => {
+  console.log("Resposta do Servidor: " + data);
+})
+.catch(error => {
+  console.error('Erro:', error);
+});
+
+```
+### Possíveis Respostas:
+```javascript
+Status: 200
+Response Body: Senha atualizada com sucesso.
+```
+
+```javascript
+Status: 400
+Response Body: Senha Nova deve possuir pelo menos 8 caracteres
+```
+
+```javascript
+Status: 400
+Response Body: Nova senha não pode ser igual à atual.
+```
+
+```javascript
+Status: 401
+Response Body: Senha Atual Inválida
+```
+
+```javascript
+Status: 403
+Response Body: Token Inválido
+```
+<br>
+
 ### WEB SOCKET JOGO DA VELHA
 
 ```markdown
