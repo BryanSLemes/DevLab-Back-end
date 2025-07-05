@@ -21,7 +21,7 @@ public class TokenService {
                 .withIssuer("Login")
                 .withSubject(usuario.getUsuario())
                 .withExpiresAt(LocalDateTime.now()
-                        .plusHours(1)
+                        .plusHours(5)
                         .toInstant(ZoneOffset.of("-03:00"))
                 ).sign(Algorithm.HMAC256(encryptionKey));
     }

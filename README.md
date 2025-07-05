@@ -12,7 +12,8 @@
   <a href="#executar-projeto">Executando o Projeto</a> •
   <a href="https://github.com/AntonioMartinss/DevLab_front_end">Front-end</a> •
   <a href="#endpoints">Endpoints</a> •
-  <a href="#criptografia">Criptografia assimétrica dos dados</a>
+  <a href="#criptografia">Criptografia assimétrica dos dados</a> •
+  <a href="#bibliotecas">Bibliotecas</a>
 </div>
 
 # Sobre o projeto
@@ -501,3 +502,73 @@ function stringToArray(inputString) {
   return resultArray;
 }
 ```
+
+<br>
+
+<h1 id="bibliotecas">Bibliotecas Utilizadas</h1>
+
+## org.springframework.boot
+
+- **spring-boot-starter-web**  
+  Fornece as funcionalidades básicas para criar aplicações web com Spring MVC, incluindo servidor embutido, REST APIs, etc.
+
+- **spring-boot-starter-security**  
+  Framework para adicionar segurança à aplicação, como autenticação e autorização.
+
+- **spring-boot-starter-test**  
+  Conjunto de dependências para testes unitários e de integração, como JUnit, Mockito e Spring Test.
+
+- **spring-boot-starter-data-mongodb**  
+  Integração com MongoDB usando Spring Data, facilitando operações no banco de dados NoSQL.
+
+- **spring-boot-starter-validation**  
+  Suporte à validação de dados usando JSR-380 (Bean Validation API), para validar entradas em DTOs e entidades.
+
+- **spring-boot-maven-plugin**  
+  Plugin Maven para empacotamento e execução simplificada da aplicação Spring Boot.
+
+---
+
+## org.springframework
+
+- **spring-messaging**
+  Suporte a mensagens assíncronas e WebSocket, útil para comunicação em tempo real.
+
+- **spring-websocket** 
+  Implementação de WebSocket no Spring, para comunicação bidirecional entre cliente e servidor.
+
+---
+
+## com.auth0
+
+- **java-jwt**
+  Biblioteca para criação, assinatura e verificação de tokens JWT (JSON Web Tokens), usada para autenticação via token.
+
+---
+
+## org.projectlombok
+
+- **lombok**
+  Facilita o desenvolvimento ao gerar código boilerplate automaticamente (getters, setters, construtores, equals/hashCode, etc).
+
+---
+
+## com.fasterxml.jackson.core
+
+- **jackson-databind**
+  Biblioteca para serialização e desserialização JSON, convertendo objetos Java para JSON e vice-versa.
+
+---
+
+## com.github.ulisesbocchio
+
+- **jasypt-spring-boot-starter**
+  Integração Jasypt com Spring Boot para criptografia de propriedades sensíveis, como senhas e chaves.
+
+---
+
+## org.bouncycastle
+
+- **bcprov-jdk15on**
+  Provedor de criptografia Java que oferece implementações de algoritmos seguros, usado para operações criptográficas avançadas.
+
