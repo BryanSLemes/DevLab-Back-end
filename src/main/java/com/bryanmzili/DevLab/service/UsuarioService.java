@@ -36,6 +36,8 @@ public class UsuarioService {
         if (usuarioRepository.findByEmail(usuario.getEmail()) == null) {
             if (usuarioRepository.findByUsuario(usuario.getUsuario()) == null) {
                 usuario.setSenha(encryptionService.encode(usuario.getSenha()));
+                usuario.setOnline(false);
+                usuario.setId(null);
                 usuarioRepository.save(usuario);
                 return Pair.of("Usuário criado com sucesso", HttpStatus.CREATED);
             } 

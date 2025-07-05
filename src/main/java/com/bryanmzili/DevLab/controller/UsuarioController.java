@@ -62,7 +62,6 @@ public class UsuarioController {
 
             return verificarCadastro(usuario);
         } catch (Exception e) {
-            System.out.println("Erro durante o cadastro: " + e.getMessage());
             return ResponseEntity.badRequest().body("Formato de parâmetro inválido");
         }
     }
@@ -72,8 +71,7 @@ public class UsuarioController {
         try {
             Usuario usuario = decryptUser(encryptedData);
 
-            UsernamePasswordAuthenticationToken usernamePasswordAuthenticationToken
-                    = new UsernamePasswordAuthenticationToken(usuario.getUsuario(), usuario.getSenha());
+            UsernamePasswordAuthenticationToken usernamePasswordAuthenticationToken = new UsernamePasswordAuthenticationToken(usuario.getUsuario(), usuario.getSenha());
 
             Authentication authenticate = authenticationManager.authenticate(usernamePasswordAuthenticationToken);
             Usuario authenticatedUser = (Usuario) authenticate.getPrincipal();
@@ -95,7 +93,6 @@ public class UsuarioController {
                 return new ResponseEntity<>(usuarioLogado.toJson(), HttpStatus.OK);
             }
         } catch (Exception e) {
-//            System.out.println(e.getMessage());
         }
 
         return new ResponseEntity<>("Token inválido", HttpStatus.UNAUTHORIZED);
@@ -112,7 +109,6 @@ public class UsuarioController {
                 return ResponseEntity.ok(historico);
             }
         } catch (Exception e) {
-//            System.out.println(e.getMessage());
         }
 
         return new ResponseEntity<>("Token inválido", HttpStatus.UNAUTHORIZED);

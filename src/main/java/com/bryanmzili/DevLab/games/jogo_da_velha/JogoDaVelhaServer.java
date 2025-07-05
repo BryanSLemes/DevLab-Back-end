@@ -164,7 +164,7 @@ public class JogoDaVelhaServer extends GameServer {
             case 2 ->
                 partida.setVencedor(idJogador2);
             default ->
-                partida.setVencedor("");
+                partida.setVencedor("Empate");
         }
 
         partidaService.salvarPartida(partida);

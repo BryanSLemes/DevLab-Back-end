@@ -7,10 +7,13 @@ import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
+import org.bson.Document;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.aggregation.Aggregation;
+import org.springframework.data.mongodb.core.aggregation.AggregationExpression;
 import org.springframework.data.mongodb.core.aggregation.AggregationResults;
+import org.springframework.data.mongodb.core.aggregation.ConditionalOperators;
 import org.springframework.data.mongodb.core.aggregation.ConvertOperators;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.stereotype.Service;
@@ -43,10 +46,9 @@ public class PartidaService {
                 Criteria.where("jogador2").regex("^[a-fA-F0-9]{24}$")
         );
 
-        Criteria vencedorValido = new Criteria().andOperator(
-                Criteria.where("vencedor").ne(null),
-                Criteria.where("vencedor").ne(""),
-                Criteria.where("vencedor").regex("^[a-fA-F0-9]{24}$")
+        Criteria vencedorValido = new Criteria().orOperator(
+                Criteria.where("vencedor").regex("^[a-fA-F0-9]{24}$"),
+                Criteria.where("vencedor").is("Empate")
         );
 
         Criteria matchCriteria = new Criteria().andOperator(
@@ -59,6 +61,19 @@ public class PartidaService {
                 vencedorValido
         );
 
+        AggregationExpression nullValue = context -> new Document("$literal", null);
+
+        AggregationExpression regexMatchExpr = context -> new Document(
+                "$regexMatch",
+                new Document("input", "$vencedor")
+                        .append("regex", "^[a-fA-F0-9]{24}$")
+        );
+
+        AggregationExpression vencedorObjIdExpr = ConditionalOperators
+                .when(regexMatchExpr)
+                .then(ConvertOperators.ToObjectId.toObjectId("$vencedor"))
+                .otherwise(nullValue);
+
         Aggregation agg = Aggregation.newAggregation(
                 Aggregation.match(matchCriteria),
                 Aggregation.addFields()
@@ -68,7 +83,7 @@ public class PartidaService {
                         .addFieldWithValue("jogador2ObjId", ConvertOperators.ToObjectId.toObjectId("$jogador2"))
                         .build(),
                 Aggregation.addFields()
-                        .addFieldWithValue("vencedorObjId", ConvertOperators.ToObjectId.toObjectId("$vencedor"))
+                        .addFieldWithValue("vencedorObjId", vencedorObjIdExpr)
                         .build(),
                 Aggregation.lookup("usuarios", "jogador1ObjId", "_id", "jogador1Info"),
                 Aggregation.lookup("usuarios", "jogador2ObjId", "_id", "jogador2Info"),
@@ -76,7 +91,8 @@ public class PartidaService {
                 Aggregation.project()
                         .and("jogador1Info.usuario").arrayElementAt(0).as("jogador1")
                         .and("jogador2Info.usuario").arrayElementAt(0).as("jogador2")
-                        .and("vencedorInfo.usuario").arrayElementAt(0).as("vencedor")
+                        .and("vencedorInfo.usuario").arrayElementAt(0).as("vencedorUsuario")
+                        .and("vencedor").as("vencedorOriginal")
                         .and("data").as("data")
                         .and("status").as("status")
         );
@@ -86,6 +102,14 @@ public class PartidaService {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm:ss");
 
         return results.getMappedResults().stream().map(dto -> {
+            if (dto.getVencedorUsuario() == null && "Empate".equalsIgnoreCase(dto.getVencedorOriginal())) {
+                dto.setVencedor("Empate");
+            } else if (dto.getVencedorUsuario() != null) {
+                dto.setVencedor(dto.getVencedorUsuario());
+            } else {
+                dto.setVencedor(dto.getVencedorOriginal());
+            }
+
             try {
                 Object dataObj = dto.getData();
 
@@ -105,9 +129,9 @@ public class PartidaService {
             } catch (Exception e) {
                 dto.setData("Data inválida");
             }
+
             return dto;
         }).toList();
 
     }
-
 }
