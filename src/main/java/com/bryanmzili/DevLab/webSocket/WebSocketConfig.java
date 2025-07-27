@@ -20,5 +20,6 @@ public class WebSocketConfig implements WebSocketConfigurer {
     @Override
     public void registerWebSocketHandlers(WebSocketHandlerRegistry registry) {
         registry.addHandler(new JogoDaVelhaWebSocketHandler(), "/DevLab/jogo-da-velha").addInterceptors(jwtHandshakeInterceptor).setAllowedOrigins("*");
+        registry.addHandler(new JogoDaVelhaPrivateWebSocketHandler(), "/DevLab/jogo-da-velha-private").addInterceptors(jwtHandshakeInterceptor).setAllowedOrigins("*");
     }
 }

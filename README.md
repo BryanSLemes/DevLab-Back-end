@@ -346,7 +346,7 @@ Response Body: Token Inválido
 WS /jogo-da-velha?token=SEU_TOKEN_JWT - Abrir conexão WebSocket com autenticação via token
 ```
 ```javascript
-//Exemplo de conexão WebSocket com com autenticação via token
+//Exemplo de conexão WebSocket com autenticação via token
 socket = new WebSocket('ws://localhost:8080/DevLab/jogo-da-velha?token=' + sessionStorage.getItem("token"));
 
 socket.onopen = function (event) {
@@ -501,6 +501,69 @@ Detalhes: Representação do tabuleiro do jogo da velha.
 As linhas são separadas por "\n" e cada célula por " | "
 ```
 
+<br>
+
+### WEB SOCKET JOGO DA VELHA PRIVADO
+
+```markdown
+WS /jogo-da-velha-private?codigo=CODIGO&token=SEU_TOKEN_JWT - Abrir conexão WebSocket privado com autenticação via token
+```
+```javascript
+//Exemplo de conexão WebSocket privado com autenticação via token
+socket = new WebSocket('ws://localhost:8080/DevLab/jogo-da-velha-private?codigo=' + codigo + '&token=' + sessionStorage.getItem("token"));
+
+socket.onopen = function (event) {
+  console.log('Conexão WebSocket aberta:', event);
+};
+
+socket.onmessage = function (event) {
+  console.log('Mensagem recebida do servidor:', event.data);
+};
+
+socket.onerror = function (error) {
+  console.error('Erro na conexão WebSocket:', error);
+};
+
+socket.onclose = function (event) {
+  if (event.wasClean) {
+    console.log('Conexão fechada de forma limpa.');
+  } else {
+    console.log('Conexão fechada de forma inesperada.');
+  }
+}
+```
+## Criação de Jogo Privado
+
+Para criar um jogo privado acesse a url sem o parâmetro <b>codigo</b>.
+<br>
+Ou acesse a url com o parâmetro <b>codigo</b> estando vazio.
+
+```javascript
+//Exemplo de criação de jogo privado
+socket = new WebSocket('ws://localhost:8080/DevLab/jogo-da-velha-private?token=' + sessionStorage.getItem("token"));
+```
+
+### Resposta ao Criar Jogo Privado
+
+```javascript
+Evento: `onmessage`
+Conteúdo: codigo-gerado: XXXXXX
+Detalhes: /*Indica que a partida foi iniciada com sucesso e retorna o código de acesso da partida privada*/
+```
+
+### Possíveis Respostas:
+
+```javascript
+Evento: `onmessage`
+Conteúdo: Código expirado ou inválido.
+Detalhes: 
+```
+
+```javascript
+Evento: `onmessage`
+Conteúdo: Código inválido ou já utilizado.
+Detalhes: 
+```
 <br>
 
 <h2 id="criptografia">Criptografar dados que serão enviados ao servidor</h2>
