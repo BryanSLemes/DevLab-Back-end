@@ -1,4 +1,4 @@
-package com.bryanmzili.DevLab;
+package com.bryanmzili.DevLab.security;
 
 import java.io.StringReader;
 import java.security.KeyFactory;

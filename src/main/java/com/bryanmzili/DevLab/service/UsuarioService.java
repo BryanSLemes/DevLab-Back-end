@@ -1,6 +1,6 @@
 package com.bryanmzili.DevLab.service;
 
-import com.bryanmzili.DevLab.EncryptionDecryptionUtil;
+import com.bryanmzili.DevLab.security.EncryptionDecryptionUtil;
 import com.bryanmzili.DevLab.data.TrocaSenhaDTO;
 import com.bryanmzili.DevLab.data.Usuario;
 import com.bryanmzili.DevLab.data.UsuarioRepository;

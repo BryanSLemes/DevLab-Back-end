@@ -1,7 +1,7 @@
 package com.bryanmzili.DevLab.controller;
 
-import com.bryanmzili.DevLab.EncryptedData;
-import com.bryanmzili.DevLab.EncryptionDecryptionUtil;
+import com.bryanmzili.DevLab.data.EncryptedData;
+import com.bryanmzili.DevLab.security.EncryptionDecryptionUtil;
 import com.bryanmzili.DevLab.data.PartidaViewDTO;
 import com.bryanmzili.DevLab.data.TrocaSenhaDTO;
 import com.bryanmzili.DevLab.data.Usuario;
@@ -22,6 +22,7 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
@@ -115,7 +116,7 @@ public class UsuarioController {
         return new ResponseEntity<>("Token inválido", HttpStatus.UNAUTHORIZED);
     }
 
-    @PostMapping("/trocar-senha")
+    @PatchMapping("/trocar-senha")
     public ResponseEntity<String> trocarSenha(@RequestHeader("Authorization") String token, @RequestBody EncryptedData encryptedData) {
         try {
             String subject = this.tokenService.getSubject(token);

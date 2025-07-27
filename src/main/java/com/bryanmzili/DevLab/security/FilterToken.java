@@ -1,4 +1,4 @@
-package com.bryanmzili.DevLab;
+package com.bryanmzili.DevLab.security;
 
 import com.bryanmzili.DevLab.data.Usuario;
 import com.bryanmzili.DevLab.data.UsuarioRepository;

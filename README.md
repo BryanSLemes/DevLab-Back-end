@@ -295,7 +295,7 @@ let formData = {
 };
 
 fetch('http://localhost:8080/DevLab/usuario/trocar-senha', {
-  method: 'POST',
+  method: 'PATCH',
   headers: {
     'Content-Type': 'application/json',
     'Authorization': sessionStorage.getItem("token")
