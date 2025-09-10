@@ -261,7 +261,8 @@ Response Body: /*Será retornado um JSON com as partidas do usuário*/
   "jogador2":"Pedro",
   "vencedor":"Rafael",
   "data":"02/07/2025 20:27:10",
-  "status":"finalizada"
+  "status":"finalizada",
+  "jogo":"Dama"
 }
 
 //status pode vir como finalizada ou desistência
@@ -270,7 +271,8 @@ Response Body: /*Será retornado um JSON com as partidas do usuário*/
   "jogador2":"Pedro",
   "vencedor":"Pedro",
   "data":"02/07/2025 20:27:15",
-  "status":"desistência"
+  "status":"desistência",
+  "jogo":"Jogo da Velha"
 }
 ```
 
@@ -282,9 +284,9 @@ Response Body: Token inválido
 
 <br>
 
-### POST TROCAR SENHA
+### PATCH TROCAR SENHA
 ```markdown
-POST /usuario/trocar-senha - Efetuar troca de senha do usuário.
+PATCH /usuario/trocar-senha - Efetuar troca de senha do usuário.
 ```
 ```javascript
 let formData = {
@@ -566,6 +568,239 @@ Detalhes:
 ```
 <br>
 
+### WEB SOCKET DAMA
+
+```markdown
+WS /dama?token=SEU_TOKEN_JWT - Abrir conexão WebSocket com autenticação via token
+```
+```javascript
+//Exemplo de conexão WebSocket com autenticação via token
+socket = new WebSocket('ws://localhost:8080/DevLab/dama?token=' + sessionStorage.getItem("token"));
+
+socket.onopen = function (event) {
+  console.log('Conexão WebSocket aberta:', event);
+};
+
+socket.onmessage = function (event) {
+  console.log('Mensagem recebida do servidor:', event.data);
+};
+
+socket.onerror = function (error) {
+  console.error('Erro na conexão WebSocket:', error);
+};
+
+socket.onclose = function (event) {
+  if (event.wasClean) {
+    console.log('Conexão fechada de forma limpa.');
+  } else {
+    console.log('Conexão fechada de forma inesperada.');
+  }
+}
+```
+## Possíveis Respostas:
+
+### Respostas de Estado da Conexão WebSocket
+
+<b>Obs:</b>
+A propriedade readyState indica o estado atual da conexão WebSocket e pode ser acessada diretamente a partir da instância do socket
+
+```javascript
+var readyState = socket.readyState;
+```
+
+<!-- 
+readyState:
+0 - conectando
+1 - open
+2 - closing
+3 - closed
+ -->
+
+```javascript
+/*Conexão iniciada (tentando se conectar)*/
+Status: Conectando (`readyState: 0`)  
+Detalhes: /**A conexão WebSocket foi criada, mas ainda está no processo de conexão com o servidor.*/
+```
+
+```javascript
+/*Conexão estabelecida com sucesso*/
+Status: Conectado (`readyState: 1`)  
+Evento: `onopen`
+Detalhes: /*A conexão WebSocket está ativa e pronta para troca de mensagens.*/
+```
+
+```javascript
+/*Token inválido / falha na autenticação ou Jogador já está em outra partida*/
+Status: Conexão recusada (`readyState: 3`)  
+Evento: `onerror`
+Detalhes: /*A conexão WebSocket foi recusada.*/
+```
+
+```javascript
+/*Conexão encerrada ou perdida*/
+Status: Encerrado (`readyState: 3`)  
+Evento: `onclose`
+Detalhes: /*A conexão WebSocket foi encerrada.*/
+```
+
+### Respostas Durante a Partida
+<b>Obs: </b>
+* As respostas listadas abaixo serão recebidas enquanto a conexão WebSocket estiver aberta<br>(readyState === 1);<br>
+
+* As mensagens enviadas pelo servidor são tratadas por meio do evento onmessage;
+* O conteúdo da mensagem é acessado pela propriedade <b>event.data</b>;
+
+```javascript
+var readyState = socket.readyState;
+```
+
+```javascript
+Evento: `onmessage`
+Conteúdo: Jogo Iniciado!
+Detalhes: /*Indica que a partida foi iniciada com sucesso e os jogadores estão conectados.*/
+```
+
+```javascript
+Evento: `onmessage`
+Conteúdo: Sua vez.
+Detalhes: /*O servidor está notificando ao jogador de que é sua vez de jogar.*/
+```
+
+```javascript
+Evento: `onmessage`
+Conteúdo: Vez do adversário
+Detalhes: /*O servidor está notificando ao jogador de que é a vez do adversário de jogar.*/
+```
+
+```javascript
+Evento: `onmessage`
+Conteúdo: Não é sua vez
+Detalhes: /*O servidor está notificando ao jogador de que não é sua vez de jogar.*/
+```
+
+```javascript
+Evento: `onmessage`
+Conteúdo: Movimento inválido!
+Detalhes: /*O servidor rejeitou a jogada enviada por ser inválida segundo as regras do jogo.*/
+```
+
+```javascript
+Evento: `onmessage`
+Conteúdo: Você venceu a partida
+Detalhes: /*O jogo foi finalizado e o jogador venceu.*/
+```
+
+```javascript
+Evento: `onmessage`
+Conteúdo: Vitória do adversário
+Detalhes: /*O jogo foi finalizado e o adversário venceu.*/
+```
+
+```javascript
+Evento: `onmessage`
+Conteúdo: O outro jogador se desconectou. Fim da Partida.
+Detalhes: /*O jogo foi finalizado e o jogador ganhou por desistência do adversário*/
+```
+
+```javascript
+Evento: `onmessage`
+Conteúdo: Você foi desconectado por inatividade.
+Detalhes: /*O jogo foi finalizado e o jogador perdeu por inatividade de 1:30 minutos*/
+```
+
+```javascript
+Evento: `onmessage`
+Conteúdo: Empate
+Detalhes: /*O jogo foi finalizado como empate*/
+```
+
+```javascript
+Evento: `onmessage`
+Conteúdo: 
+.p.p.p.p \n
+p.p.p.p. \n
+.p.p.p.p \n
+........ \n
+........ \n
+b.b.b.b. \n
+.b.b.b.b \n
+b.b.b.b. \n
+/*Neste exemplo, não foi executada nenhuma jogada, ponto inicial do jogo*/
+
+Detalhes: Representação do tabuleiro de Dama.  
+- . : posição vazia  
+- p : peça preta   
+- P : dama preta
+- b : peça branca  
+- B : dama Branca
+As linhas são separadas por "\n"
+```
+
+<br>
+
+### WEB SOCKET DAMA PRIVADO
+
+```markdown
+WS /dama-private?codigo=CODIGO&token=SEU_TOKEN_JWT - Abrir conexão WebSocket privado com autenticação via token
+```
+```javascript
+//Exemplo de conexão WebSocket privado com autenticação via token
+socket = new WebSocket('ws://localhost:8080/DevLab/dama-private?codigo=' + codigo + '&token=' + sessionStorage.getItem("token"));
+
+socket.onopen = function (event) {
+  console.log('Conexão WebSocket aberta:', event);
+};
+
+socket.onmessage = function (event) {
+  console.log('Mensagem recebida do servidor:', event.data);
+};
+
+socket.onerror = function (error) {
+  console.error('Erro na conexão WebSocket:', error);
+};
+
+socket.onclose = function (event) {
+  if (event.wasClean) {
+    console.log('Conexão fechada de forma limpa.');
+  } else {
+    console.log('Conexão fechada de forma inesperada.');
+  }
+}
+```
+## Criação de Jogo Privado
+
+Para criar um jogo privado acesse a url sem o parâmetro <b>codigo</b>.
+<br>
+Ou acesse a url com o parâmetro <b>codigo</b> estando vazio.
+
+```javascript
+//Exemplo de criação de jogo privado
+socket = new WebSocket('ws://localhost:8080/DevLab/dama-private?token=' + sessionStorage.getItem("token"));
+```
+
+### Resposta ao Criar Jogo Privado
+
+```javascript
+Evento: `onmessage`
+Conteúdo: codigo-gerado: XXXXXX
+Detalhes: /*Indica que a partida foi iniciada com sucesso e retorna o código de acesso da partida privada*/
+```
+
+### Possíveis Respostas:
+
+```javascript
+Evento: `onmessage`
+Conteúdo: Código expirado ou inválido.
+Detalhes: 
+```
+
+```javascript
+Evento: `onmessage`
+Conteúdo: Código inválido ou já utilizado.
+Detalhes: 
+```
+<br>
+
 <h2 id="criptografia">Criptografar dados que serão enviados ao servidor</h2>
 
 Este tópico abordará sobre a necessidade de criptografar os dados que serão enviados para servidor.
@@ -692,4 +927,11 @@ function stringToArray(inputString) {
 
 - **bcprov-jdk15on**
   Provedor de criptografia Java que oferece implementações de algoritmos seguros, usado para operações criptográficas avançadas.
+
+## DevonMcGrath
+
+- **Java-Checkers**  
+  Projeto que implementa a lógica e a interface gráfica de um jogo de Damas.  
+  O código original foi incorporado ao projeto sem alterações, sendo desenvolvida a classe `DamaUtils.java` exclusivamente para gerenciar a lógica do jogo, sem a necessidade de executar a interface gráfica.  
+  [Repositório Original](https://github.com/DevonMcGrath/Java-Checkers)
 

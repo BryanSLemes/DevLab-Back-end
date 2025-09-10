@@ -95,6 +95,7 @@ public class PartidaService {
                         .and("vencedor").as("vencedorOriginal")
                         .and("data").as("data")
                         .and("status").as("status")
+                        .and("jogo").as("jogo")
         );
 
         AggregationResults<PartidaViewDTO> results = mongoTemplate.aggregate(agg, "partidas", PartidaViewDTO.class);

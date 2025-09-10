@@ -20,5 +20,7 @@ public class Partida {
     
     private LocalDateTime data;
     
-    private String status;   
+    private String status;
+    
+    private String jogo;
 }

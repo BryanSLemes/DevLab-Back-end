@@ -2,21 +2,23 @@ package com.bryanmzili.DevLab.webSocket;
 
 import com.bryanmzili.DevLab.SpringContext;
 import com.bryanmzili.DevLab.data.Usuario;
-import com.bryanmzili.DevLab.games.jogo_da_velha.JogoDaVelhaServer;
+import com.bryanmzili.DevLab.games.dama.DamaServer;
 import com.bryanmzili.DevLab.service.UsuarioService;
 import java.util.Map;
-import org.springframework.web.socket.*;
-import org.springframework.web.socket.handler.TextWebSocketHandler;
 import java.util.Queue;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+import org.springframework.web.socket.CloseStatus;
+import org.springframework.web.socket.TextMessage;
+import org.springframework.web.socket.WebSocketSession;
+import org.springframework.web.socket.handler.TextWebSocketHandler;
 
-public class JogoDaVelhaWebSocketHandler extends TextWebSocketHandler {
+public class DamaWebSocketHandler extends TextWebSocketHandler {
 
     private final Queue<WebSocketSession> esperaPorJogadores = new ConcurrentLinkedQueue<>();
-    private final Map<WebSocketSession, JogoDaVelhaServer> jogosEmExecucao = new ConcurrentHashMap<>();
+    private final Map<WebSocketSession, DamaServer> jogosEmExecucao = new ConcurrentHashMap<>();
     private final ExecutorService executarGames = Executors.newCachedThreadPool();
 
     @Override
@@ -28,7 +30,7 @@ public class JogoDaVelhaWebSocketHandler extends TextWebSocketHandler {
     @Override
     public void afterConnectionClosed(WebSocketSession session, CloseStatus status) throws Exception {
         esperaPorJogadores.remove(session);
-        JogoDaVelhaServer game = jogosEmExecucao.remove(session);
+        DamaServer game = jogosEmExecucao.remove(session);
         setJogadorOffline(session);
         if (game != null) {
             WebSocketSession otherPlayer = (game.getJogador1() == session) ? game.getJogador2() : game.getJogador1();
@@ -41,7 +43,7 @@ public class JogoDaVelhaWebSocketHandler extends TextWebSocketHandler {
 
     @Override
     protected void handleTextMessage(WebSocketSession sessao, TextMessage mensagem) throws Exception {
-        JogoDaVelhaServer jogo = jogosEmExecucao.get(sessao);
+        DamaServer jogo = jogosEmExecucao.get(sessao);
         if (jogo != null) {
             jogo.lidarComMensagem(sessao, mensagem.getPayload());
         }
@@ -52,7 +54,7 @@ public class JogoDaVelhaWebSocketHandler extends TextWebSocketHandler {
             WebSocketSession jogador1 = esperaPorJogadores.poll();
             WebSocketSession jogador2 = esperaPorJogadores.poll();
 
-            JogoDaVelhaServer game = new JogoDaVelhaServer(jogador1, jogador2);
+            DamaServer game = new DamaServer(jogador1, jogador2);
             jogosEmExecucao.put(jogador1, game);
             jogosEmExecucao.put(jogador2, game);
 

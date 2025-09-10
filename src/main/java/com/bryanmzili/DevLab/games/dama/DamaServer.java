@@ -1,4 +1,4 @@
-package com.bryanmzili.DevLab.games.jogo_da_velha;
+package com.bryanmzili.DevLab.games.dama;
 
 import com.bryanmzili.DevLab.SpringContext;
 import com.bryanmzili.DevLab.data.Partida;
@@ -6,8 +6,6 @@ import com.bryanmzili.DevLab.games.GameServer;
 import com.bryanmzili.DevLab.games.Jogada;
 import com.bryanmzili.DevLab.service.PartidaService;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import org.springframework.web.socket.TextMessage;
-import org.springframework.web.socket.WebSocketSession;
 import java.io.IOException;
 import java.time.Duration;
 import java.time.Instant;
@@ -15,8 +13,10 @@ import java.time.LocalDateTime;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
+import org.springframework.web.socket.TextMessage;
+import org.springframework.web.socket.WebSocketSession;
 
-public class JogoDaVelhaServer extends GameServer {
+public class DamaServer extends GameServer {
 
     private final WebSocketSession jogador1;
     private final WebSocketSession jogador2;
@@ -28,8 +28,8 @@ public class JogoDaVelhaServer extends GameServer {
     private final ScheduledExecutorService monitorInatividade = Executors.newSingleThreadScheduledExecutor();
     private final long TIMEOUT_SECONDS = 90;
 
-    public JogoDaVelhaServer(WebSocketSession player1, WebSocketSession player2) {
-        super(new JogoDaVelha());
+    public DamaServer(WebSocketSession player1, WebSocketSession player2) {
+        super(new Dama());
         this.jogador1 = player1;
         this.jogador2 = player2;
         this.jogadorAtual = player1; //O Jogador 1 começa o jogo
@@ -60,14 +60,18 @@ public class JogoDaVelhaServer extends GameServer {
     public void lidarComMensagem(WebSocketSession sessao, String mensagem) throws IOException {
         ultimaAtividade = Instant.now();
 
+        int turno = ((Dama) getGame()).jogadorAtual(); // 1 = jogador1, 2 = jogador2
+        jogadorAtual = (turno == 1) ? jogador1 : jogador2;
+
         if (sessao != jogadorAtual) {
             enviarMensagem(sessao, "Não é sua vez");
             return;
         }
 
-        Jogada movimento = objectMapper.readValue(mensagem, MovimentoJogoDaVelha.class);
+        Jogada movimento = objectMapper.readValue(mensagem, MovimentoDama.class);
 
-        if (getGame().isJogadaValida(movimento, ((jogadorAtual == getJogador1()) ? 1 : 2))) {
+        if (getGame().isJogadaValida(movimento, turno)) {
+
             if (getGame().isJogoFinalizado()) {
                 enviarMensagemParaAmbosJogadores(getGame().toString());
                 finalizadoManual = true;
@@ -97,8 +101,8 @@ public class JogoDaVelhaServer extends GameServer {
                 jogador1.close();
             } else {
                 enviarMensagemParaAmbosJogadores(getGame().toString());
-
-                jogadorAtual = (jogadorAtual == getJogador1()) ? getJogador2() : getJogador1();
+                turno = ((Dama) getGame()).jogadorAtual();
+                jogadorAtual = (turno == 1) ? jogador1 : jogador2;
                 enviarMensagem(jogadorAtual, "Sua vez.");
                 enviarMensagem(jogadorAdversario(), "Vez do adversário");
             }
@@ -157,7 +161,7 @@ public class JogoDaVelhaServer extends GameServer {
         partida.setJogador2(idJogador2);
         partida.setData(LocalDateTime.now());
         partida.setStatus(status);
-        partida.setJogo("Jogo da Velha");
+        partida.setJogo("Dama");
 
         switch (vencedor) {
             case 1 ->

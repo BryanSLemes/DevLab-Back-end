@@ -17,6 +17,8 @@ public class PartidaViewDTO {
 
     private Object data;
     private String status;
+    
+    private String jogo;
 
     public PartidaViewDTO() {
     }
@@ -75,5 +77,13 @@ public class PartidaViewDTO {
 
     public void setStatus(String status) {
         this.status = status;
+    }
+
+    public String getJogo() {
+        return jogo;
+    }
+
+    public void setJogo(String jogo) {
+        this.jogo = jogo;
     }
 }
