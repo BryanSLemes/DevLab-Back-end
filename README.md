@@ -801,6 +801,247 @@ Detalhes:
 ```
 <br>
 
+### WEB SOCKET XADREZ
+
+```markdown
+WS /xadrez?token=SEU_TOKEN_JWT - Abrir conexão WebSocket com autenticação via token
+```
+```javascript
+//Exemplo de conexão WebSocket com autenticação via token
+socket = new WebSocket('ws://localhost:8080/DevLab/xadrez?token=' + sessionStorage.getItem("token"));
+
+socket.onopen = function (event) {
+  console.log('Conexão WebSocket aberta:', event);
+};
+
+socket.onmessage = function (event) {
+  console.log('Mensagem recebida do servidor:', event.data);
+};
+
+socket.onerror = function (error) {
+  console.error('Erro na conexão WebSocket:', error);
+};
+
+socket.onclose = function (event) {
+  if (event.wasClean) {
+    console.log('Conexão fechada de forma limpa.');
+  } else {
+    console.log('Conexão fechada de forma inesperada.');
+  }
+}
+```
+## Possíveis Respostas:
+
+### Respostas de Estado da Conexão WebSocket
+
+<b>Obs:</b>
+A propriedade readyState indica o estado atual da conexão WebSocket e pode ser acessada diretamente a partir da instância do socket
+
+```javascript
+var readyState = socket.readyState;
+```
+
+<!-- 
+readyState:
+0 - conectando
+1 - open
+2 - closing
+3 - closed
+ -->
+
+```javascript
+/*Conexão iniciada (tentando se conectar)*/
+Status: Conectando (`readyState: 0`)  
+Detalhes: /**A conexão WebSocket foi criada, mas ainda está no processo de conexão com o servidor.*/
+```
+
+```javascript
+/*Conexão estabelecida com sucesso*/
+Status: Conectado (`readyState: 1`)  
+Evento: `onopen`
+Detalhes: /*A conexão WebSocket está ativa e pronta para troca de mensagens.*/
+```
+
+```javascript
+/*Token inválido / falha na autenticação ou Jogador já está em outra partida*/
+Status: Conexão recusada (`readyState: 3`)  
+Evento: `onerror`
+Detalhes: /*A conexão WebSocket foi recusada.*/
+```
+
+```javascript
+/*Conexão encerrada ou perdida*/
+Status: Encerrado (`readyState: 3`)  
+Evento: `onclose`
+Detalhes: /*A conexão WebSocket foi encerrada.*/
+```
+
+### Respostas Durante a Partida
+<b>Obs: </b>
+* As respostas listadas abaixo serão recebidas enquanto a conexão WebSocket estiver aberta<br>(readyState === 1);<br>
+
+* As mensagens enviadas pelo servidor são tratadas por meio do evento onmessage;
+* O conteúdo da mensagem é acessado pela propriedade <b>event.data</b>;
+
+```javascript
+var readyState = socket.readyState;
+```
+
+```javascript
+Evento: `onmessage`
+Conteúdo: Jogo Iniciado!
+Detalhes: /*Indica que a partida foi iniciada com sucesso e os jogadores estão conectados.*/
+```
+
+```javascript
+Evento: `onmessage`
+Conteúdo: Sua vez.
+Detalhes: /*O servidor está notificando ao jogador de que é sua vez de jogar.*/
+```
+
+```javascript
+Evento: `onmessage`
+Conteúdo: Vez do adversário
+Detalhes: /*O servidor está notificando ao jogador de que é a vez do adversário de jogar.*/
+```
+
+```javascript
+Evento: `onmessage`
+Conteúdo: Não é sua vez
+Detalhes: /*O servidor está notificando ao jogador de que não é sua vez de jogar.*/
+```
+
+```javascript
+Evento: `onmessage`
+Conteúdo: Movimento inválido!
+Detalhes: /*O servidor rejeitou a jogada enviada por ser inválida segundo as regras do jogo.*/
+```
+
+```javascript
+Evento: `onmessage`
+Conteúdo: Você venceu a partida
+Detalhes: /*O jogo foi finalizado e o jogador venceu.*/
+```
+
+```javascript
+Evento: `onmessage`
+Conteúdo: Vitória do adversário
+Detalhes: /*O jogo foi finalizado e o adversário venceu.*/
+```
+
+```javascript
+Evento: `onmessage`
+Conteúdo: O outro jogador se desconectou. Fim da Partida.
+Detalhes: /*O jogo foi finalizado e o jogador ganhou por desistência do adversário*/
+```
+
+```javascript
+Evento: `onmessage`
+Conteúdo: Você foi desconectado por inatividade.
+Detalhes: /*O jogo foi finalizado e o jogador perdeu por inatividade de 1:30 minutos*/
+```
+
+```javascript
+Evento: `onmessage`
+Conteúdo: Empate
+Detalhes: /*O jogo foi finalizado como empate*/
+```
+
+```javascript
+Evento: `onmessage`
+Conteúdo: 
+rnbqkbnr \n
+pppppppp \n
+........ \n
+........ \n
+........ \n
+........ \n
+PPPPPPPP \n
+RNBQKBNR \n
+/*Neste exemplo, não foi executada nenhuma jogada, ponto inicial do jogo*/
+
+Detalhes: Representação do tabuleiro de Xadrez.  
+- . : posição vazia  
+- r : torre preta   
+- R : torre branca
+- n : cavalo preto  
+- N : cavalo Branco
+- b : bispo preto  
+- B : bispo branco
+- q : rainha preta
+- Q : rainha Branca
+- k : rei preto
+- K : rei Branco
+- p : peão preto
+- P : peão Branco
+As linhas são separadas por "\n"
+```
+
+<br>
+
+### WEB SOCKET XADREZ PRIVADO
+
+```markdown
+WS /xadrez-private?codigo=CODIGO&token=SEU_TOKEN_JWT - Abrir conexão WebSocket privado com autenticação via token
+```
+```javascript
+//Exemplo de conexão WebSocket privado com autenticação via token
+socket = new WebSocket('ws://localhost:8080/DevLab/xadrez-private?codigo=' + codigo + '&token=' + sessionStorage.getItem("token"));
+
+socket.onopen = function (event) {
+  console.log('Conexão WebSocket aberta:', event);
+};
+
+socket.onmessage = function (event) {
+  console.log('Mensagem recebida do servidor:', event.data);
+};
+
+socket.onerror = function (error) {
+  console.error('Erro na conexão WebSocket:', error);
+};
+
+socket.onclose = function (event) {
+  if (event.wasClean) {
+    console.log('Conexão fechada de forma limpa.');
+  } else {
+    console.log('Conexão fechada de forma inesperada.');
+  }
+}
+```
+## Criação de Jogo Privado
+
+Para criar um jogo privado acesse a url sem o parâmetro <b>codigo</b>.
+<br>
+Ou acesse a url com o parâmetro <b>codigo</b> estando vazio.
+
+```javascript
+//Exemplo de criação de jogo privado
+socket = new WebSocket('ws://localhost:8080/DevLab/xadrez-private?token=' + sessionStorage.getItem("token"));
+```
+
+### Resposta ao Criar Jogo Privado
+
+```javascript
+Evento: `onmessage`
+Conteúdo: codigo-gerado: XXXXXX
+Detalhes: /*Indica que a partida foi iniciada com sucesso e retorna o código de acesso da partida privada*/
+```
+
+### Possíveis Respostas:
+
+```javascript
+Evento: `onmessage`
+Conteúdo: Código expirado ou inválido.
+Detalhes: 
+```
+
+```javascript
+Evento: `onmessage`
+Conteúdo: Código inválido ou já utilizado.
+Detalhes: 
+```
+<br>
+
 <h2 id="criptografia">Criptografar dados que serão enviados ao servidor</h2>
 
 Este tópico abordará sobre a necessidade de criptografar os dados que serão enviados para servidor.
@@ -934,4 +1175,12 @@ function stringToArray(inputString) {
   Projeto que implementa a lógica e a interface gráfica de um jogo de Damas.  
   O código original foi incorporado ao projeto sem alterações, sendo desenvolvida a classe `DamaUtils.java` exclusivamente para gerenciar a lógica do jogo, sem a necessidade de executar a interface gráfica.  
   [Repositório Original](https://github.com/DevonMcGrath/Java-Checkers)
+
+## bhlangonijr
+
+- **Chesslib**  
+  Biblioteca que implementa a lógica de um jogo de Xadrez.  
+  O código foi integrado ao projeto via arquivo Maven `pom.xml`, sendo desenvolvida a classe `XadrezUtils.java` exclusivamente para gerenciar a lógica do jogo.  
+  [Repositório Original](https://github.com/bhlangonijr/chesslib)
+
 

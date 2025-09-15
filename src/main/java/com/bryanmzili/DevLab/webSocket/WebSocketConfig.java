@@ -23,5 +23,7 @@ public class WebSocketConfig implements WebSocketConfigurer {
         registry.addHandler(new JogoDaVelhaPrivateWebSocketHandler(), "/DevLab/jogo-da-velha-private").addInterceptors(jwtHandshakeInterceptor).setAllowedOrigins("*");
         registry.addHandler(new DamaWebSocketHandler(), "/DevLab/dama").addInterceptors(jwtHandshakeInterceptor).setAllowedOrigins("*");
         registry.addHandler(new DamaPrivateWebSocketHandler(), "/DevLab/dama-private").addInterceptors(jwtHandshakeInterceptor).setAllowedOrigins("*");
+        registry.addHandler(new XadrezWebSocketHandler(), "/DevLab/xadrez").addInterceptors(jwtHandshakeInterceptor).setAllowedOrigins("*");
+        registry.addHandler(new XadrezPrivateWebSocketHandler(), "/DevLab/xadrez-private").addInterceptors(jwtHandshakeInterceptor).setAllowedOrigins("*");
     }
 }

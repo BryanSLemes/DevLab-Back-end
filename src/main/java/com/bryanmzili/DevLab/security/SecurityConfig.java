@@ -43,6 +43,8 @@ public class SecurityConfig implements WebMvcConfigurer {
                 .requestMatchers("/DevLab/jogo-da-velha-private").permitAll()
                 .requestMatchers("/DevLab/dama").permitAll()
                 .requestMatchers("/DevLab/dama-private").permitAll()
+                .requestMatchers("/DevLab/xadrez").permitAll()
+                .requestMatchers("/DevLab/xadrez-private").permitAll()
                 .anyRequest().authenticated()
         )
                 .addFilterBefore(filter, UsernamePasswordAuthenticationFilter.class)

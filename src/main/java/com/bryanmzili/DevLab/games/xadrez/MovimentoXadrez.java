@@ -1,18 +1,18 @@
-package com.bryanmzili.DevLab.games.dama;
+package com.bryanmzili.DevLab.games.xadrez;
 
 import com.bryanmzili.DevLab.games.Jogada;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import java.util.Objects;
 
-public class MovimentoDama implements Jogada {
+public class MovimentoXadrez implements Jogada {
 
     private final int linhaOrigem;
     private final int colunaOrigem;
     private final int linhaDestino;
     private final int colunaDestino;
 
-    public MovimentoDama(int linhaOrigem, int colunaOrigem, int linhaDestino, int colunaDestino) {
+    public MovimentoXadrez(int linhaOrigem, int colunaOrigem, int linhaDestino, int colunaDestino) {
         this.linhaOrigem = linhaOrigem;
         this.colunaOrigem = colunaOrigem;
         this.linhaDestino = linhaDestino;
@@ -20,7 +20,7 @@ public class MovimentoDama implements Jogada {
     }
 
     @JsonCreator
-    public MovimentoDama(
+    public MovimentoXadrez(
             @JsonProperty("idPosicaoOriginal") String idPosicaoOriginal,
             @JsonProperty("idPosicaoNova") String idPosicaoNova
     ) {
@@ -76,10 +76,10 @@ public class MovimentoDama implements Jogada {
         if (this == o) {
             return true;
         }
-        if (!(o instanceof MovimentoDama)) {
+        if (!(o instanceof MovimentoXadrez)) {
             return false;
         }
-        MovimentoDama m = (MovimentoDama) o;
+        MovimentoXadrez m = (MovimentoXadrez) o;
         return linhaOrigem == m.linhaOrigem
                 && colunaOrigem == m.colunaOrigem
                 && linhaDestino == m.linhaDestino
