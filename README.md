@@ -12,6 +12,7 @@
   <a href="#executar-projeto">Executando o Projeto</a> •
   <a href="https://github.com/AntonioMartinss/DevLab_front_end">Front-end</a> •
   <a href="#endpoints">Endpoints</a> •
+  <a href="#websockets">Websockets</a> •
   <a href="#criptografia">Criptografia assimétrica dos dados</a> •
   <a href="#bibliotecas">Bibliotecas</a>
 </div>
@@ -342,36 +343,7 @@ Response Body: Token Inválido
 ```
 <br>
 
-### WEB SOCKET JOGO DA VELHA
-
-```markdown
-WS /jogo-da-velha?token=SEU_TOKEN_JWT - Abrir conexão WebSocket com autenticação via token
-```
-```javascript
-//Exemplo de conexão WebSocket com autenticação via token
-socket = new WebSocket('ws://localhost:8080/DevLab/jogo-da-velha?token=' + sessionStorage.getItem("token"));
-
-socket.onopen = function (event) {
-  console.log('Conexão WebSocket aberta:', event);
-};
-
-socket.onmessage = function (event) {
-  console.log('Mensagem recebida do servidor:', event.data);
-};
-
-socket.onerror = function (error) {
-  console.error('Erro na conexão WebSocket:', error);
-};
-
-socket.onclose = function (event) {
-  if (event.wasClean) {
-    console.log('Conexão fechada de forma limpa.');
-  } else {
-    console.log('Conexão fechada de forma inesperada.');
-  }
-}
-```
-## Possíveis Respostas:
+<h2 id="websockets">Endpoints Websocket da Aplicação</h2>
 
 ### Respostas de Estado da Conexão WebSocket
 
@@ -488,31 +460,47 @@ Conteúdo: Empate
 Detalhes: /*O jogo foi finalizado como empate*/
 ```
 
-```javascript
-Evento: `onmessage`
-Conteúdo: 
-1 | 2 | 2 \n
-1 | 1 | 0 \n
-1 | 0 | 2 \n
-/*Neste exemplo, o jogador "X" venceu com uma coluna vertical completa na primeira coluna.*/
-
-Detalhes: Representação do tabuleiro do jogo da velha.  
-- 0: posição vazia  
-- 1: jogador "X"  
-- 2: jogador "O"  
-As linhas são separadas por "\n" e cada célula por " | "
-```
-
 <br>
 
-### WEB SOCKET JOGO DA VELHA PRIVADO
+## Criação de Jogo Privado
+
+Para criar um jogo privado acesse a url sem o parâmetro <b>codigo</b>.
+<br>
+Ou acesse a url com o parâmetro <b>codigo</b> estando vazio.
+
+URL's válidas:
+
++ /DevLab/jogo-da-velha-private
++ /DevLab/dama-private
++ /DevLab/xadrez-private
+
+```javascript
+//Exemplo de criação de jogo privado
+socket = new WebSocket('ws://localhost:8080/DevLab/jogo-da-velha-private?token=' + sessionStorage.getItem("token"));
+```
+
+### Resposta ao Criar Jogo Privado
+
+```javascript
+Evento: `onmessage`
+Conteúdo: codigo-gerado: XXXXXX
+Detalhes: /*Indica que a partida foi iniciada com sucesso e retorna o código de acesso da partida privada*/
+```
+
+## Entrar em Jogo Privado
+
+URL's válidas:
+
++ /DevLab/jogo-da-velha-private
++ /DevLab/dama-private
++ /DevLab/xadrez-private
 
 ```markdown
-WS /jogo-da-velha-private?codigo=CODIGO&token=SEU_TOKEN_JWT - Abrir conexão WebSocket privado com autenticação via token
+WS /URL?codigo=CODIGO&token=SEU_TOKEN_JWT - Abrir conexão WebSocket privado com autenticação via token
 ```
 ```javascript
 //Exemplo de conexão WebSocket privado com autenticação via token
-socket = new WebSocket('ws://localhost:8080/DevLab/jogo-da-velha-private?codigo=' + codigo + '&token=' + sessionStorage.getItem("token"));
+socket = new WebSocket('ws://localhost:8080/URL?codigo=' + codigo + '&token=' + sessionStorage.getItem("token"));
 
 socket.onopen = function (event) {
   console.log('Conexão WebSocket aberta:', event);
@@ -534,24 +522,6 @@ socket.onclose = function (event) {
   }
 }
 ```
-## Criação de Jogo Privado
-
-Para criar um jogo privado acesse a url sem o parâmetro <b>codigo</b>.
-<br>
-Ou acesse a url com o parâmetro <b>codigo</b> estando vazio.
-
-```javascript
-//Exemplo de criação de jogo privado
-socket = new WebSocket('ws://localhost:8080/DevLab/jogo-da-velha-private?token=' + sessionStorage.getItem("token"));
-```
-
-### Resposta ao Criar Jogo Privado
-
-```javascript
-Evento: `onmessage`
-Conteúdo: codigo-gerado: XXXXXX
-Detalhes: /*Indica que a partida foi iniciada com sucesso e retorna o código de acesso da partida privada*/
-```
 
 ### Possíveis Respostas:
 
@@ -566,6 +536,56 @@ Evento: `onmessage`
 Conteúdo: Código inválido ou já utilizado.
 Detalhes: 
 ```
+
+<br>
+
+### WEB SOCKET JOGO DA VELHA
+
+```markdown
+WS /jogo-da-velha?token=SEU_TOKEN_JWT - Abrir conexão WebSocket com autenticação via token
+```
+```javascript
+//Exemplo de conexão WebSocket com autenticação via token
+socket = new WebSocket('ws://localhost:8080/DevLab/jogo-da-velha?token=' + sessionStorage.getItem("token"));
+
+socket.onopen = function (event) {
+  console.log('Conexão WebSocket aberta:', event);
+};
+
+socket.onmessage = function (event) {
+  console.log('Mensagem recebida do servidor:', event.data);
+};
+
+socket.onerror = function (error) {
+  console.error('Erro na conexão WebSocket:', error);
+};
+
+socket.onclose = function (event) {
+  if (event.wasClean) {
+    console.log('Conexão fechada de forma limpa.');
+  } else {
+    console.log('Conexão fechada de forma inesperada.');
+  }
+}
+```
+
+## Organização jogo:
+
+```javascript
+Evento: `onmessage`
+Conteúdo: 
+1 | 2 | 2 \n
+1 | 1 | 0 \n
+1 | 0 | 2 \n
+/*Neste exemplo, o jogador "X" venceu com uma coluna vertical completa na primeira coluna.*/
+
+Detalhes: Representação do tabuleiro do jogo da velha.  
+- 0: posição vazia  
+- 1: jogador "X"  
+- 2: jogador "O"  
+As linhas são separadas por "\n" e cada célula por " | "
+```
+
 <br>
 
 ### WEB SOCKET DAMA
@@ -597,122 +617,7 @@ socket.onclose = function (event) {
   }
 }
 ```
-## Possíveis Respostas:
-
-### Respostas de Estado da Conexão WebSocket
-
-<b>Obs:</b>
-A propriedade readyState indica o estado atual da conexão WebSocket e pode ser acessada diretamente a partir da instância do socket
-
-```javascript
-var readyState = socket.readyState;
-```
-
-<!-- 
-readyState:
-0 - conectando
-1 - open
-2 - closing
-3 - closed
- -->
-
-```javascript
-/*Conexão iniciada (tentando se conectar)*/
-Status: Conectando (`readyState: 0`)  
-Detalhes: /**A conexão WebSocket foi criada, mas ainda está no processo de conexão com o servidor.*/
-```
-
-```javascript
-/*Conexão estabelecida com sucesso*/
-Status: Conectado (`readyState: 1`)  
-Evento: `onopen`
-Detalhes: /*A conexão WebSocket está ativa e pronta para troca de mensagens.*/
-```
-
-```javascript
-/*Token inválido / falha na autenticação ou Jogador já está em outra partida*/
-Status: Conexão recusada (`readyState: 3`)  
-Evento: `onerror`
-Detalhes: /*A conexão WebSocket foi recusada.*/
-```
-
-```javascript
-/*Conexão encerrada ou perdida*/
-Status: Encerrado (`readyState: 3`)  
-Evento: `onclose`
-Detalhes: /*A conexão WebSocket foi encerrada.*/
-```
-
-### Respostas Durante a Partida
-<b>Obs: </b>
-* As respostas listadas abaixo serão recebidas enquanto a conexão WebSocket estiver aberta<br>(readyState === 1);<br>
-
-* As mensagens enviadas pelo servidor são tratadas por meio do evento onmessage;
-* O conteúdo da mensagem é acessado pela propriedade <b>event.data</b>;
-
-```javascript
-var readyState = socket.readyState;
-```
-
-```javascript
-Evento: `onmessage`
-Conteúdo: Jogo Iniciado!
-Detalhes: /*Indica que a partida foi iniciada com sucesso e os jogadores estão conectados.*/
-```
-
-```javascript
-Evento: `onmessage`
-Conteúdo: Sua vez.
-Detalhes: /*O servidor está notificando ao jogador de que é sua vez de jogar.*/
-```
-
-```javascript
-Evento: `onmessage`
-Conteúdo: Vez do adversário
-Detalhes: /*O servidor está notificando ao jogador de que é a vez do adversário de jogar.*/
-```
-
-```javascript
-Evento: `onmessage`
-Conteúdo: Não é sua vez
-Detalhes: /*O servidor está notificando ao jogador de que não é sua vez de jogar.*/
-```
-
-```javascript
-Evento: `onmessage`
-Conteúdo: Movimento inválido!
-Detalhes: /*O servidor rejeitou a jogada enviada por ser inválida segundo as regras do jogo.*/
-```
-
-```javascript
-Evento: `onmessage`
-Conteúdo: Você venceu a partida
-Detalhes: /*O jogo foi finalizado e o jogador venceu.*/
-```
-
-```javascript
-Evento: `onmessage`
-Conteúdo: Vitória do adversário
-Detalhes: /*O jogo foi finalizado e o adversário venceu.*/
-```
-
-```javascript
-Evento: `onmessage`
-Conteúdo: O outro jogador se desconectou. Fim da Partida.
-Detalhes: /*O jogo foi finalizado e o jogador ganhou por desistência do adversário*/
-```
-
-```javascript
-Evento: `onmessage`
-Conteúdo: Você foi desconectado por inatividade.
-Detalhes: /*O jogo foi finalizado e o jogador perdeu por inatividade de 1:30 minutos*/
-```
-
-```javascript
-Evento: `onmessage`
-Conteúdo: Empate
-Detalhes: /*O jogo foi finalizado como empate*/
-```
+## Organização jogo:
 
 ```javascript
 Evento: `onmessage`
@@ -736,69 +641,6 @@ Detalhes: Representação do tabuleiro de Dama.
 As linhas são separadas por "\n"
 ```
 
-<br>
-
-### WEB SOCKET DAMA PRIVADO
-
-```markdown
-WS /dama-private?codigo=CODIGO&token=SEU_TOKEN_JWT - Abrir conexão WebSocket privado com autenticação via token
-```
-```javascript
-//Exemplo de conexão WebSocket privado com autenticação via token
-socket = new WebSocket('ws://localhost:8080/DevLab/dama-private?codigo=' + codigo + '&token=' + sessionStorage.getItem("token"));
-
-socket.onopen = function (event) {
-  console.log('Conexão WebSocket aberta:', event);
-};
-
-socket.onmessage = function (event) {
-  console.log('Mensagem recebida do servidor:', event.data);
-};
-
-socket.onerror = function (error) {
-  console.error('Erro na conexão WebSocket:', error);
-};
-
-socket.onclose = function (event) {
-  if (event.wasClean) {
-    console.log('Conexão fechada de forma limpa.');
-  } else {
-    console.log('Conexão fechada de forma inesperada.');
-  }
-}
-```
-## Criação de Jogo Privado
-
-Para criar um jogo privado acesse a url sem o parâmetro <b>codigo</b>.
-<br>
-Ou acesse a url com o parâmetro <b>codigo</b> estando vazio.
-
-```javascript
-//Exemplo de criação de jogo privado
-socket = new WebSocket('ws://localhost:8080/DevLab/dama-private?token=' + sessionStorage.getItem("token"));
-```
-
-### Resposta ao Criar Jogo Privado
-
-```javascript
-Evento: `onmessage`
-Conteúdo: codigo-gerado: XXXXXX
-Detalhes: /*Indica que a partida foi iniciada com sucesso e retorna o código de acesso da partida privada*/
-```
-
-### Possíveis Respostas:
-
-```javascript
-Evento: `onmessage`
-Conteúdo: Código expirado ou inválido.
-Detalhes: 
-```
-
-```javascript
-Evento: `onmessage`
-Conteúdo: Código inválido ou já utilizado.
-Detalhes: 
-```
 <br>
 
 ### WEB SOCKET XADREZ
@@ -830,122 +672,7 @@ socket.onclose = function (event) {
   }
 }
 ```
-## Possíveis Respostas:
-
-### Respostas de Estado da Conexão WebSocket
-
-<b>Obs:</b>
-A propriedade readyState indica o estado atual da conexão WebSocket e pode ser acessada diretamente a partir da instância do socket
-
-```javascript
-var readyState = socket.readyState;
-```
-
-<!-- 
-readyState:
-0 - conectando
-1 - open
-2 - closing
-3 - closed
- -->
-
-```javascript
-/*Conexão iniciada (tentando se conectar)*/
-Status: Conectando (`readyState: 0`)  
-Detalhes: /**A conexão WebSocket foi criada, mas ainda está no processo de conexão com o servidor.*/
-```
-
-```javascript
-/*Conexão estabelecida com sucesso*/
-Status: Conectado (`readyState: 1`)  
-Evento: `onopen`
-Detalhes: /*A conexão WebSocket está ativa e pronta para troca de mensagens.*/
-```
-
-```javascript
-/*Token inválido / falha na autenticação ou Jogador já está em outra partida*/
-Status: Conexão recusada (`readyState: 3`)  
-Evento: `onerror`
-Detalhes: /*A conexão WebSocket foi recusada.*/
-```
-
-```javascript
-/*Conexão encerrada ou perdida*/
-Status: Encerrado (`readyState: 3`)  
-Evento: `onclose`
-Detalhes: /*A conexão WebSocket foi encerrada.*/
-```
-
-### Respostas Durante a Partida
-<b>Obs: </b>
-* As respostas listadas abaixo serão recebidas enquanto a conexão WebSocket estiver aberta<br>(readyState === 1);<br>
-
-* As mensagens enviadas pelo servidor são tratadas por meio do evento onmessage;
-* O conteúdo da mensagem é acessado pela propriedade <b>event.data</b>;
-
-```javascript
-var readyState = socket.readyState;
-```
-
-```javascript
-Evento: `onmessage`
-Conteúdo: Jogo Iniciado!
-Detalhes: /*Indica que a partida foi iniciada com sucesso e os jogadores estão conectados.*/
-```
-
-```javascript
-Evento: `onmessage`
-Conteúdo: Sua vez.
-Detalhes: /*O servidor está notificando ao jogador de que é sua vez de jogar.*/
-```
-
-```javascript
-Evento: `onmessage`
-Conteúdo: Vez do adversário
-Detalhes: /*O servidor está notificando ao jogador de que é a vez do adversário de jogar.*/
-```
-
-```javascript
-Evento: `onmessage`
-Conteúdo: Não é sua vez
-Detalhes: /*O servidor está notificando ao jogador de que não é sua vez de jogar.*/
-```
-
-```javascript
-Evento: `onmessage`
-Conteúdo: Movimento inválido!
-Detalhes: /*O servidor rejeitou a jogada enviada por ser inválida segundo as regras do jogo.*/
-```
-
-```javascript
-Evento: `onmessage`
-Conteúdo: Você venceu a partida
-Detalhes: /*O jogo foi finalizado e o jogador venceu.*/
-```
-
-```javascript
-Evento: `onmessage`
-Conteúdo: Vitória do adversário
-Detalhes: /*O jogo foi finalizado e o adversário venceu.*/
-```
-
-```javascript
-Evento: `onmessage`
-Conteúdo: O outro jogador se desconectou. Fim da Partida.
-Detalhes: /*O jogo foi finalizado e o jogador ganhou por desistência do adversário*/
-```
-
-```javascript
-Evento: `onmessage`
-Conteúdo: Você foi desconectado por inatividade.
-Detalhes: /*O jogo foi finalizado e o jogador perdeu por inatividade de 1:30 minutos*/
-```
-
-```javascript
-Evento: `onmessage`
-Conteúdo: Empate
-Detalhes: /*O jogo foi finalizado como empate*/
-```
+## Organização jogo:
 
 ```javascript
 Evento: `onmessage`
@@ -977,69 +704,6 @@ Detalhes: Representação do tabuleiro de Xadrez.
 As linhas são separadas por "\n"
 ```
 
-<br>
-
-### WEB SOCKET XADREZ PRIVADO
-
-```markdown
-WS /xadrez-private?codigo=CODIGO&token=SEU_TOKEN_JWT - Abrir conexão WebSocket privado com autenticação via token
-```
-```javascript
-//Exemplo de conexão WebSocket privado com autenticação via token
-socket = new WebSocket('ws://localhost:8080/DevLab/xadrez-private?codigo=' + codigo + '&token=' + sessionStorage.getItem("token"));
-
-socket.onopen = function (event) {
-  console.log('Conexão WebSocket aberta:', event);
-};
-
-socket.onmessage = function (event) {
-  console.log('Mensagem recebida do servidor:', event.data);
-};
-
-socket.onerror = function (error) {
-  console.error('Erro na conexão WebSocket:', error);
-};
-
-socket.onclose = function (event) {
-  if (event.wasClean) {
-    console.log('Conexão fechada de forma limpa.');
-  } else {
-    console.log('Conexão fechada de forma inesperada.');
-  }
-}
-```
-## Criação de Jogo Privado
-
-Para criar um jogo privado acesse a url sem o parâmetro <b>codigo</b>.
-<br>
-Ou acesse a url com o parâmetro <b>codigo</b> estando vazio.
-
-```javascript
-//Exemplo de criação de jogo privado
-socket = new WebSocket('ws://localhost:8080/DevLab/xadrez-private?token=' + sessionStorage.getItem("token"));
-```
-
-### Resposta ao Criar Jogo Privado
-
-```javascript
-Evento: `onmessage`
-Conteúdo: codigo-gerado: XXXXXX
-Detalhes: /*Indica que a partida foi iniciada com sucesso e retorna o código de acesso da partida privada*/
-```
-
-### Possíveis Respostas:
-
-```javascript
-Evento: `onmessage`
-Conteúdo: Código expirado ou inválido.
-Detalhes: 
-```
-
-```javascript
-Evento: `onmessage`
-Conteúdo: Código inválido ou já utilizado.
-Detalhes: 
-```
 <br>
 
 <h2 id="criptografia">Criptografar dados que serão enviados ao servidor</h2>
